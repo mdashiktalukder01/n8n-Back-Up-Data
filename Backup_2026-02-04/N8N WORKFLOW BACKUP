@@ -1,0 +1,968 @@
+{
+  "updatedAt": "2026-02-03T23:40:40.215Z",
+  "createdAt": "2026-01-21T20:44:56.452Z",
+  "id": "cRBUeVvX3OH6tXCb",
+  "name": "N8N WORKFLOW BACKUP",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -3520,
+        -288
+      ],
+      "id": "301c7fb2-0112-40a0-895e-cca3bed0c1d1",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "filters": {},
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-base.n8n",
+      "typeVersion": 1,
+      "position": [
+        -2992,
+        -352
+      ],
+      "id": "1042829a-aa96-48c3-9725-a0dd6544eb81",
+      "name": "Get many workflows",
+      "alwaysOutputData": false,
+      "credentials": {
+        "n8nApi": {
+          "id": "rt1J4jzO2Io3gg39",
+          "name": "n8n account 5"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 4
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -3520,
+        -512
+      ],
+      "id": "b3b80f9c-2a8b-4da1-9c03-a3894c5e620e",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -2816,
+        -352
+      ],
+      "id": "6694b01c-86e5-4aa1-ad74-f4b85c6e4058",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "44a22b5c-3ffe-47e7-a916-0fec9b404a5e",
+              "name": "updatedAt",
+              "value": "={{ JSON.stringify($json, null, 2) }}",
+              "type": "string"
+            },
+            {
+              "id": "ee3707a2-9648-45f1-aa4a-47cbe940a696",
+              "name": "fileName",
+              "value": "={{ $json.name }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -2384,
+        -352
+      ],
+      "id": "3d35775d-c999-480e-a745-afb092f325e9",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "94493be8-cceb-467d-b634-bae2455ebdbd",
+              "name": "FolderName",
+              "value": "=Backup_{{ $now.format('yyyy-MM-dd') }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -3168,
+        -352
+      ],
+      "id": "db8d5edb-b372-4c39-9f6f-f964b11d4d85",
+      "name": "Backup Date"
+    },
+    {
+      "parameters": {
+        "operation": "toText",
+        "sourceProperty": "updatedAt",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        -2176,
+        -352
+      ],
+      "id": "b255b213-8817-4019-a3a2-9ecf1692b35a",
+      "name": "Convert to File"
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "owner": {
+          "__rl": true,
+          "value": "mdashiktalukder01",
+          "mode": "name"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "n8n-Back-Up-Data",
+          "mode": "list",
+          "cachedResultName": "n8n-Back-Up-Data",
+          "cachedResultUrl": "https://github.com/mdashiktalukder01/n8n-Back-Up-Data"
+        },
+        "filePath": "={{ $('Backup Date').item.json.FolderName }}/{{ $('Edit Fields1').item.json.fileName }}",
+        "binaryData": true,
+        "commitMessage": "={{ $now.setZone('Asia/Dhaka').format('yyyy-MM-dd T') }} Backup Completed"
+      },
+      "type": "n8n-nodes-base.github",
+      "typeVersion": 1.1,
+      "position": [
+        -1968,
+        -352
+      ],
+      "id": "cb5260e3-58d6-48d1-9252-ee9fc343d6bb",
+      "name": "Create a file",
+      "webhookId": "56c86e18-fe12-4857-b0db-0718cadf1e95",
+      "retryOnFail": false,
+      "credentials": {
+        "githubApi": {
+          "id": "ijeFHxzclzobiXmA",
+          "name": "GitHub account 4"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1nruiiYzdTUedpWiJ91MnTuf94JERrOSRkMlkw96VUa8",
+          "mode": "list",
+          "cachedResultName": " A&T-N8N ",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1nruiiYzdTUedpWiJ91MnTuf94JERrOSRkMlkw96VUa8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 634132864,
+          "mode": "list",
+          "cachedResultName": "n8n Backup File",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1nruiiYzdTUedpWiJ91MnTuf94JERrOSRkMlkw96VUa8/edit#gid=634132864"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Date Time": "={{ $now.setZone('Asia/Dhaka').format('yyyy-MM-dd T') }}",
+            "File Name": "={{ $('Edit Fields1').item.json.fileName }}",
+            "Folder Name": "={{ $('Backup Date').item.json.FolderName }}",
+            " Massage": "Error  ( Not a Backup File )"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Date Time",
+              "displayName": "Date Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Folder Name",
+              "displayName": "Folder Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "File Name",
+              "displayName": "File Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": " Massage",
+              "displayName": " Massage",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -1744,
+        -368
+      ],
+      "id": "8007a5d7-147d-4cf0-a77e-8a81cc207e91",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "LyUMa6lnJRFCagwx",
+          "name": "ashiktalukder9043@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "owner": {
+          "__rl": true,
+          "value": "mdashiktalukder01",
+          "mode": "name"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "n8n-Back-Up-Data",
+          "mode": "list",
+          "cachedResultName": "n8n-Back-Up-Data",
+          "cachedResultUrl": "https://github.com/mdashiktalukder01/n8n-Back-Up-Data"
+        },
+        "filePath": "={{ $('Backup Date').item.json.FolderName }}/README.md",
+        "fileContent": "=# N8N Workflow Backup - {{ $('Backup Date').item.json.FolderName }}\nThis folder contains the backup of aii N8N workflow as of {{ $now.setZone('Asia/Dhaka').format('yyyy-MM-dd T') }}\n\n## Backup Details\n- Backup Time : {{ $now.setZone('Asia/Dhaka').format('yyyy-MM-dd T') }}\n- Totak Workflow : {{ $('Get many workflows').all().length }}\n\n## Files \nEach workflow is saved as a separate JSON file with the format \n\n---\n*Automatically generated by N8N Backup Workflow*",
+        "commitMessage": "vdvd"
+      },
+      "type": "n8n-nodes-base.github",
+      "typeVersion": 1.1,
+      "position": [
+        -2512,
+        -512
+      ],
+      "id": "15ea3827-ae8a-4734-8f67-bfbb4b22c924",
+      "name": "Create a file1",
+      "webhookId": "7f2ae616-b9ba-4ec2-9d6e-91f9774455ec",
+      "credentials": {
+        "githubApi": {
+          "id": "ijeFHxzclzobiXmA",
+          "name": "GitHub account 4"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "ashiktalukder336@gmail.com",
+        "subject": "={{ $json['Folder Name'] }} /Completed",
+        "message": "=<!doctype html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <title>Backup Completed</title>\n</head>\n<body style=\"margin:0;padding:0;background:#f6f8fb;font-family:Arial,Helvetica,sans-serif;\">\n  <table role=\"presentation\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" style=\"background:#f6f8fb;padding:20px 0;\">\n    <tr>\n      <td align=\"center\">\n        <table role=\"presentation\" width=\"620\" cellspacing=\"0\" cellpadding=\"0\" style=\"background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,0.06);\">\n          \n          <!-- Header -->\n          <tr>\n            <td style=\"padding:22px 26px;background:#0b5cff;color:#ffffff;\">\n              <div style=\"font-size:18px;font-weight:700;letter-spacing:0.2px;\">\n                ✅ Backup Completed\n              </div>\n              <div style=\"margin-top:6px;font-size:13px;opacity:0.9;\">\n                Your daily backup finished successfully.\n              </div>\n            </td>\n          </tr>\n\n          <!-- Content -->\n          <tr>\n            <td style=\"padding:22px 26px;color:#0f172a;\">\n              <div style=\"font-size:14px;line-height:1.6;\">\n                <strong>Summary</strong><br/>\n                <span style=\"color:#475569;\">\n                  {{SUMMARY_TEXT}}\n                </span>\n              </div>\n\n              <div style=\"height:14px;\"></div>\n\n              <!-- Details box -->\n              <table role=\"presentation\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" style=\"background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;\">\n                <tr>\n                  <td style=\"padding:14px 14px;\">\n                    <table role=\"presentation\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\">\n                      <tr>\n                        <td style=\"padding:6px 0;font-size:13px;color:#334155;\">\n                          <strong>Date:</strong> <span style=\"color:#0f172a;\">{{ $json['Date Time'] }}</span>\n                        </td>\n                      </tr>\n                      <tr>\n                        <td style=\"padding:6px 0;font-size:13px;color:#334155;\">\n                          <strong>Folder Name:</strong> <span style=\"color:#0f172a;\">{{ $('Backup Date').item.json.FolderName }}</span>\n                        </td>\n                      </tr>\n                      <tr>\n                        <td style=\"padding:6px 0;font-size:13px;color:#334155;\">\n                          <strong>Totak Workflow:</strong> <span style=\"color:#0f172a;\">{{ $('Get many workflows').all().length }}</span>\n                        </td>\n                      </tr>\n                    </table>\n                  </td>\n                </tr>\n              </table>\n\n              <div style=\"height:16px;\"></div>\n\n              <div style=\"font-size:12px;color:#64748b;line-height:1.6;\">\n                If you didn’t run this backup, please check your server access and automation settings.\n              </div>\n            </td>\n          </tr>\n\n          <!-- Footer -->\n          <tr>\n            <td style=\"padding:16px 26px;background:#ffffff;border-top:1px solid #eef2f7;color:#94a3b8;font-size:12px;\">\n              <div>\n                Sent automatically by your Backup Automation System\n              </div>\n            </td>\n          </tr>\n\n        </table>\n\n        <div style=\"height:14px;\"></div>\n\n        <div style=\"font-size:12px;color:#94a3b8;\">\n          © 2026 Backup Monitor\n        </div>\n\n      </td>\n    </tr>\n  </table>\n</body>\n</html>",
+        "options": {
+          "appendAttribution": false,
+          "senderName": "N8N BACKUP",
+          "replyToSenderOnly": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        -2336,
+        -656
+      ],
+      "id": "59305013-1822-4de8-81f3-86089b72f0f8",
+      "name": "Send a message",
+      "webhookId": "7d45fac1-3736-4150-8e93-b27a09274ab8",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "E7o8gPU8gx563Ed1",
+          "name": "azadtalukder1122@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        -2512,
+        -656
+      ],
+      "id": "e1f62352-0bd2-45c5-9fd9-318856b9476b",
+      "name": "Limit"
+    }
+  ],
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Backup Date",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Backup Date",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many workflows": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "Create a file1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Limit",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Backup Date": {
+      "main": [
+        [
+          {
+            "node": "Get many workflows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Convert to File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File": {
+      "main": [
+        [
+          {
+            "node": "Create a file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a file": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a file1": {
+      "main": [
+        []
+      ]
+    },
+    "Limit": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": []
+    }
+  },
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "c85bc588-29d1-4aa6-b3a2-d0cba7ad0df4",
+  "activeVersionId": "c85bc588-29d1-4aa6-b3a2-d0cba7ad0df4",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2026-01-21T20:44:56.457Z",
+      "createdAt": "2026-01-21T20:44:56.457Z",
+      "role": "workflow:owner",
+      "workflowId": "cRBUeVvX3OH6tXCb",
+      "projectId": "OQG6AyXgb3w6ROOq"
+    }
+  ],
+  "activeVersion": {
+    "updatedAt": "2026-02-03T23:40:40.216Z",
+    "createdAt": "2026-02-03T23:40:40.216Z",
+    "versionId": "c85bc588-29d1-4aa6-b3a2-d0cba7ad0df4",
+    "workflowId": "cRBUeVvX3OH6tXCb",
+    "nodes": [
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.manualTrigger",
+        "typeVersion": 1,
+        "position": [
+          -3520,
+          -288
+        ],
+        "id": "301c7fb2-0112-40a0-895e-cca3bed0c1d1",
+        "name": "When clicking ‘Execute workflow’"
+      },
+      {
+        "parameters": {
+          "filters": {},
+          "requestOptions": {}
+        },
+        "type": "n8n-nodes-base.n8n",
+        "typeVersion": 1,
+        "position": [
+          -2992,
+          -352
+        ],
+        "id": "1042829a-aa96-48c3-9725-a0dd6544eb81",
+        "name": "Get many workflows",
+        "alwaysOutputData": false,
+        "credentials": {
+          "n8nApi": {
+            "id": "rt1J4jzO2Io3gg39",
+            "name": "n8n account 5"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "triggerAtHour": 4
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.3,
+        "position": [
+          -3520,
+          -512
+        ],
+        "id": "b3b80f9c-2a8b-4da1-9c03-a3894c5e620e",
+        "name": "Schedule Trigger"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitInBatches",
+        "typeVersion": 3,
+        "position": [
+          -2816,
+          -352
+        ],
+        "id": "6694b01c-86e5-4aa1-ad74-f4b85c6e4058",
+        "name": "Loop Over Items"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "44a22b5c-3ffe-47e7-a916-0fec9b404a5e",
+                "name": "updatedAt",
+                "value": "={{ JSON.stringify($json, null, 2) }}",
+                "type": "string"
+              },
+              {
+                "id": "ee3707a2-9648-45f1-aa4a-47cbe940a696",
+                "name": "fileName",
+                "value": "={{ $json.name }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          -2384,
+          -352
+        ],
+        "id": "3d35775d-c999-480e-a745-afb092f325e9",
+        "name": "Edit Fields1"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "94493be8-cceb-467d-b634-bae2455ebdbd",
+                "name": "FolderName",
+                "value": "=Backup_{{ $now.format('yyyy-MM-dd') }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          -3168,
+          -352
+        ],
+        "id": "db8d5edb-b372-4c39-9f6f-f964b11d4d85",
+        "name": "Backup Date"
+      },
+      {
+        "parameters": {
+          "operation": "toText",
+          "sourceProperty": "updatedAt",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.convertToFile",
+        "typeVersion": 1.1,
+        "position": [
+          -2176,
+          -352
+        ],
+        "id": "b255b213-8817-4019-a3a2-9ecf1692b35a",
+        "name": "Convert to File"
+      },
+      {
+        "parameters": {
+          "resource": "file",
+          "owner": {
+            "__rl": true,
+            "value": "mdashiktalukder01",
+            "mode": "name"
+          },
+          "repository": {
+            "__rl": true,
+            "value": "n8n-Back-Up-Data",
+            "mode": "list",
+            "cachedResultName": "n8n-Back-Up-Data",
+            "cachedResultUrl": "https://github.com/mdashiktalukder01/n8n-Back-Up-Data"
+          },
+          "filePath": "={{ $('Backup Date').item.json.FolderName }}/{{ $('Edit Fields1').item.json.fileName }}",
+          "binaryData": true,
+          "commitMessage": "={{ $now.setZone('Asia/Dhaka').format('yyyy-MM-dd T') }} Backup Completed"
+        },
+        "type": "n8n-nodes-base.github",
+        "typeVersion": 1.1,
+        "position": [
+          -1968,
+          -352
+        ],
+        "id": "cb5260e3-58d6-48d1-9252-ee9fc343d6bb",
+        "name": "Create a file",
+        "webhookId": "56c86e18-fe12-4857-b0db-0718cadf1e95",
+        "retryOnFail": false,
+        "credentials": {
+          "githubApi": {
+            "id": "ijeFHxzclzobiXmA",
+            "name": "GitHub account 4"
+          }
+        },
+        "onError": "continueErrorOutput"
+      },
+      {
+        "parameters": {
+          "operation": "append",
+          "documentId": {
+            "__rl": true,
+            "value": "1nruiiYzdTUedpWiJ91MnTuf94JERrOSRkMlkw96VUa8",
+            "mode": "list",
+            "cachedResultName": " A&T-N8N ",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1nruiiYzdTUedpWiJ91MnTuf94JERrOSRkMlkw96VUa8/edit?usp=drivesdk"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": 634132864,
+            "mode": "list",
+            "cachedResultName": "n8n Backup File",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1nruiiYzdTUedpWiJ91MnTuf94JERrOSRkMlkw96VUa8/edit#gid=634132864"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "Date Time": "={{ $now.setZone('Asia/Dhaka').format('yyyy-MM-dd T') }}",
+              "File Name": "={{ $('Edit Fields1').item.json.fileName }}",
+              "Folder Name": "={{ $('Backup Date').item.json.FolderName }}",
+              " Massage": "Error  ( Not a Backup File )"
+            },
+            "matchingColumns": [],
+            "schema": [
+              {
+                "id": "Date Time",
+                "displayName": "Date Time",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Folder Name",
+                "displayName": "Folder Name",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "File Name",
+                "displayName": "File Name",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": " Massage",
+                "displayName": " Massage",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.7,
+        "position": [
+          -1744,
+          -368
+        ],
+        "id": "8007a5d7-147d-4cf0-a77e-8a81cc207e91",
+        "name": "Append row in sheet",
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "LyUMa6lnJRFCagwx",
+            "name": "ashiktalukder9043@gmail.com"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "resource": "file",
+          "owner": {
+            "__rl": true,
+            "value": "mdashiktalukder01",
+            "mode": "name"
+          },
+          "repository": {
+            "__rl": true,
+            "value": "n8n-Back-Up-Data",
+            "mode": "list",
+            "cachedResultName": "n8n-Back-Up-Data",
+            "cachedResultUrl": "https://github.com/mdashiktalukder01/n8n-Back-Up-Data"
+          },
+          "filePath": "={{ $('Backup Date').item.json.FolderName }}/README.md",
+          "fileContent": "=# N8N Workflow Backup - {{ $('Backup Date').item.json.FolderName }}\nThis folder contains the backup of aii N8N workflow as of {{ $now.setZone('Asia/Dhaka').format('yyyy-MM-dd T') }}\n\n## Backup Details\n- Backup Time : {{ $now.setZone('Asia/Dhaka').format('yyyy-MM-dd T') }}\n- Totak Workflow : {{ $('Get many workflows').all().length }}\n\n## Files \nEach workflow is saved as a separate JSON file with the format \n\n---\n*Automatically generated by N8N Backup Workflow*",
+          "commitMessage": "vdvd"
+        },
+        "type": "n8n-nodes-base.github",
+        "typeVersion": 1.1,
+        "position": [
+          -2512,
+          -512
+        ],
+        "id": "15ea3827-ae8a-4734-8f67-bfbb4b22c924",
+        "name": "Create a file1",
+        "webhookId": "7f2ae616-b9ba-4ec2-9d6e-91f9774455ec",
+        "credentials": {
+          "githubApi": {
+            "id": "ijeFHxzclzobiXmA",
+            "name": "GitHub account 4"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "sendTo": "ashiktalukder336@gmail.com",
+          "subject": "={{ $json['Folder Name'] }} /Completed",
+          "message": "=<!doctype html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <title>Backup Completed</title>\n</head>\n<body style=\"margin:0;padding:0;background:#f6f8fb;font-family:Arial,Helvetica,sans-serif;\">\n  <table role=\"presentation\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" style=\"background:#f6f8fb;padding:20px 0;\">\n    <tr>\n      <td align=\"center\">\n        <table role=\"presentation\" width=\"620\" cellspacing=\"0\" cellpadding=\"0\" style=\"background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,0.06);\">\n          \n          <!-- Header -->\n          <tr>\n            <td style=\"padding:22px 26px;background:#0b5cff;color:#ffffff;\">\n              <div style=\"font-size:18px;font-weight:700;letter-spacing:0.2px;\">\n                ✅ Backup Completed\n              </div>\n              <div style=\"margin-top:6px;font-size:13px;opacity:0.9;\">\n                Your daily backup finished successfully.\n              </div>\n            </td>\n          </tr>\n\n          <!-- Content -->\n          <tr>\n            <td style=\"padding:22px 26px;color:#0f172a;\">\n              <div style=\"font-size:14px;line-height:1.6;\">\n                <strong>Summary</strong><br/>\n                <span style=\"color:#475569;\">\n                  {{SUMMARY_TEXT}}\n                </span>\n              </div>\n\n              <div style=\"height:14px;\"></div>\n\n              <!-- Details box -->\n              <table role=\"presentation\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" style=\"background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;\">\n                <tr>\n                  <td style=\"padding:14px 14px;\">\n                    <table role=\"presentation\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\">\n                      <tr>\n                        <td style=\"padding:6px 0;font-size:13px;color:#334155;\">\n                          <strong>Date:</strong> <span style=\"color:#0f172a;\">{{ $json['Date Time'] }}</span>\n                        </td>\n                      </tr>\n                      <tr>\n                        <td style=\"padding:6px 0;font-size:13px;color:#334155;\">\n                          <strong>Folder Name:</strong> <span style=\"color:#0f172a;\">{{ $('Backup Date').item.json.FolderName }}</span>\n                        </td>\n                      </tr>\n                      <tr>\n                        <td style=\"padding:6px 0;font-size:13px;color:#334155;\">\n                          <strong>Totak Workflow:</strong> <span style=\"color:#0f172a;\">{{ $('Get many workflows').all().length }}</span>\n                        </td>\n                      </tr>\n                    </table>\n                  </td>\n                </tr>\n              </table>\n\n              <div style=\"height:16px;\"></div>\n\n              <div style=\"font-size:12px;color:#64748b;line-height:1.6;\">\n                If you didn’t run this backup, please check your server access and automation settings.\n              </div>\n            </td>\n          </tr>\n\n          <!-- Footer -->\n          <tr>\n            <td style=\"padding:16px 26px;background:#ffffff;border-top:1px solid #eef2f7;color:#94a3b8;font-size:12px;\">\n              <div>\n                Sent automatically by your Backup Automation System\n              </div>\n            </td>\n          </tr>\n\n        </table>\n\n        <div style=\"height:14px;\"></div>\n\n        <div style=\"font-size:12px;color:#94a3b8;\">\n          © 2026 Backup Monitor\n        </div>\n\n      </td>\n    </tr>\n  </table>\n</body>\n</html>",
+          "options": {
+            "appendAttribution": false,
+            "senderName": "N8N BACKUP",
+            "replyToSenderOnly": false
+          }
+        },
+        "type": "n8n-nodes-base.gmail",
+        "typeVersion": 2.2,
+        "position": [
+          -2336,
+          -656
+        ],
+        "id": "59305013-1822-4de8-81f3-86089b72f0f8",
+        "name": "Send a message",
+        "webhookId": "7d45fac1-3736-4150-8e93-b27a09274ab8",
+        "credentials": {
+          "gmailOAuth2": {
+            "id": "E7o8gPU8gx563Ed1",
+            "name": "azadtalukder1122@gmail.com"
+          }
+        }
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.limit",
+        "typeVersion": 1,
+        "position": [
+          -2512,
+          -656
+        ],
+        "id": "e1f62352-0bd2-45c5-9fd9-318856b9476b",
+        "name": "Limit"
+      }
+    ],
+    "connections": {
+      "When clicking ‘Execute workflow’": {
+        "main": [
+          [
+            {
+              "node": "Backup Date",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Schedule Trigger": {
+        "main": [
+          [
+            {
+              "node": "Backup Date",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get many workflows": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Loop Over Items": {
+        "main": [
+          [
+            {
+              "node": "Create a file1",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Limit",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Edit Fields1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Backup Date": {
+        "main": [
+          [
+            {
+              "node": "Get many workflows",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Edit Fields1": {
+        "main": [
+          [
+            {
+              "node": "Convert to File",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Convert to File": {
+        "main": [
+          [
+            {
+              "node": "Create a file",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Create a file": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Append row in sheet",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Append row in sheet": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Create a file1": {
+        "main": [
+          []
+        ]
+      },
+      "Limit": {
+        "main": [
+          [
+            {
+              "node": "Send a message",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Ashik Talukder",
+    "name": null,
+    "description": null
+  },
+  "tags": []
+}
