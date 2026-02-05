@@ -1,0 +1,814 @@
+{
+  "updatedAt": "2026-01-14T13:39:58.174Z",
+  "createdAt": "2025-12-29T18:58:01.314Z",
+  "id": "zdffTbdRiLi0PKHy",
+  "name": "Auto Image Genarat And Facebook Post",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        1200,
+        400
+      ],
+      "id": "77a71587-5319-47e2-a0b4-8c8035a3b91f",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "7prG4gdV03YlxXfl",
+          "name": "Zakaria Vai Api"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        2032,
+        0
+      ],
+      "id": "e7257def-1004-4d0e-a7d8-7ef0562bafd4",
+      "name": "Wait",
+      "webhookId": "b7354952-6d11-4642-afc7-fc7b6e935020"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "d2df87bc-bce9-4c3a-8bc2-72e5b39d7e5e",
+              "leftValue": "={{ $json.data.response.resultImageUrl }}",
+              "rightValue": "=success",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        2368,
+        0
+      ],
+      "id": "98315854-f24c-40d7-af79-61dec62323ad",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 8
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -96,
+        -224
+      ],
+      "id": "db872fab-fdb2-4cc3-9d3a-2cf1a54f6936",
+      "name": "8AM Trigger"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 14
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -112,
+        0
+      ],
+      "id": "a3fd54ae-2008-41a8-8d67-1bcb6df7822e",
+      "name": "Noon Trigger"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 20
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -112,
+        192
+      ],
+      "id": "bcc4ab28-a079-4d73-a0ed-5fa5e2fac764",
+      "name": "6PM Trigger"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Clean AI generated caption\nconst aiResponse = $input.first().json;\n\n// Get the caption from different possible field names\nlet caption = aiResponse.output || \n              aiResponse.text || \n              aiResponse.content || \n              aiResponse.message || \n              aiResponse.caption ||\n              JSON.stringify(aiResponse);\n\n// Remove JSON formatting artifacts\ncaption = caption\n  .replace(/```json\\s*/g, '')\n  .replace(/```\\s*/g, '')\n  .replace(/^[\"'`]+|[\"'`]+$/g, '')\n  .replace(/\\\\n\\\\n/g, '\\n\\n')\n  .replace(/\\\\n/g, '\\n')\n  .replace(/\\\\/g, '')\n  .replace(/^{\\s*\"post\":\\s*\"/i, '')\n  .replace(/\"\\s*}$/, '')\n  .trim();\n\n// Return cleaned caption\nreturn [{\n  json: {\n    caption: caption,\n    timestamp: new Date().toISOString(),\n    original: aiResponse\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1296,
+        0
+      ],
+      "id": "fcec4144-42ae-4fdf-8566-a66651820d93",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "httpRequestMethod": "POST",
+        "graphApiVersion": "v23.0",
+        "node": "917598164764417",
+        "edge": "photos",
+        "options": {
+          "queryParameters": {
+            "parameter": [
+              {
+                "name": "url",
+                "value": "={{ $json.data.response.resultImageUrl }}"
+              },
+              {
+                "name": "caption",
+                "value": "={{ $('Code in JavaScript').item.json.caption }}"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.facebookGraphApi",
+      "typeVersion": 1,
+      "position": [
+        2880,
+        112
+      ],
+      "id": "d0c62969-5d26-4ef9-9bf1-fe1d240ebbfa",
+      "name": "Talukder iT Group",
+      "credentials": {
+        "facebookGraphApi": {
+          "id": "Qzs3EkNSejOP30hz",
+          "name": "Talukder IT Group"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpRequestMethod": "POST",
+        "graphApiVersion": "v23.0",
+        "node": "777314705475895",
+        "edge": "photos",
+        "options": {
+          "queryParameters": {
+            "parameter": [
+              {
+                "name": "url",
+                "value": "={{ $json.data.response.resultImageUrl }}"
+              },
+              {
+                "name": "caption",
+                "value": "={{ $('Code in JavaScript').item.json.caption }}"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.facebookGraphApi",
+      "typeVersion": 1,
+      "position": [
+        2864,
+        -176
+      ],
+      "id": "3263b97c-052e-41e5-ac8c-055c5b2ed08e",
+      "name": "Auto Agent Ai",
+      "credentials": {
+        "facebookGraphApi": {
+          "id": "LtpnubMjA4IhOtQr",
+          "name": "Auto Agent Ai"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1pagRKWB87IRzIfvqZJ8vXThl0i0u3hpYLTHAoqFvouA",
+          "mode": "list",
+          "cachedResultName": "Talukder IT Group",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1pagRKWB87IRzIfvqZJ8vXThl0i0u3hpYLTHAoqFvouA/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 706024219,
+          "mode": "list",
+          "cachedResultName": "Post Hestory",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1pagRKWB87IRzIfvqZJ8vXThl0i0u3hpYLTHAoqFvouA/edit#gid=706024219"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Date And Time": "={{ $now }}",
+            "Photo Url": "={{ $('If').item.json.data.response.resultImageUrl }}",
+            "Caption ": "={{ $('Code in JavaScript').item.json.caption }}",
+            "ID": "={{ $json.id }}",
+            "Post ID": "={{ $json.post_id }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Date And Time",
+              "displayName": "Date And Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Photo Url",
+              "displayName": "Photo Url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Caption ",
+              "displayName": "Caption ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Post ID",
+              "displayName": "Post ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        3504,
+        -32
+      ],
+      "id": "3d962d64-09f7-4828-b541-b14c5f4c618a",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "LyUMa6lnJRFCagwx",
+          "name": "ashiktalukder9043@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        3296,
+        -32
+      ],
+      "id": "37e0047a-178a-4b28-85db-ba2a4559ea5d",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1pagRKWB87IRzIfvqZJ8vXThl0i0u3hpYLTHAoqFvouA",
+          "mode": "list",
+          "cachedResultName": "Talukder IT Group",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1pagRKWB87IRzIfvqZJ8vXThl0i0u3hpYLTHAoqFvouA/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 688420080,
+          "mode": "list",
+          "cachedResultName": "Post Keyord",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1pagRKWB87IRzIfvqZJ8vXThl0i0u3hpYLTHAoqFvouA/edit#gid=688420080"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Status"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        544,
+        0
+      ],
+      "id": "9220b460-de0e-4458-a348-3eda1bf03950",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "LyUMa6lnJRFCagwx",
+          "name": "ashiktalukder9043@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        752,
+        0
+      ],
+      "id": "455bc3b3-da3a-4a4d-8e9e-99d2a76a68f9",
+      "name": "Limit"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1pagRKWB87IRzIfvqZJ8vXThl0i0u3hpYLTHAoqFvouA",
+          "mode": "list",
+          "cachedResultName": "Talukder IT Group",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1pagRKWB87IRzIfvqZJ8vXThl0i0u3hpYLTHAoqFvouA/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 688420080,
+          "mode": "list",
+          "cachedResultName": "Post Keyord",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1pagRKWB87IRzIfvqZJ8vXThl0i0u3hpYLTHAoqFvouA/edit#gid=688420080"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Status": "Done",
+            "Keyord": "={{ $('Limit').item.json.Keyord }}"
+          },
+          "matchingColumns": [
+            "Keyord"
+          ],
+          "schema": [
+            {
+              "id": "Keyord",
+              "displayName": "Keyord",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        3696,
+        -32
+      ],
+      "id": "8ce39184-1e15-4fcd-8b04-5fbf17e3650d",
+      "name": "Update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "LyUMa6lnJRFCagwx",
+          "name": "ashiktalukder9043@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.nanobananaapi.ai/api/v1/nanobanana/generate",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer d3fb0d8c65c8631ce3280ac762c3c43d"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "prompt",
+              "value": "={{ $json.output }}"
+            },
+            {
+              "name": "numImages",
+              "value": "1"
+            },
+            {
+              "name": "type",
+              "value": "TEXTTOIAMGE"
+            },
+            {
+              "name": "image_size",
+              "value": "16:9"
+            },
+            {
+              "name": "callBackUrl",
+              "value": "https://server3.automationlearners.pro/webhook-test/d5562bd9-f60c-4e17-862c-3a4d28aa00f2"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1856,
+        0
+      ],
+      "id": "7b3e9a5a-fce6-4437-8d45-d1f11ac5b963",
+      "name": "Image Prompt Update"
+    },
+    {
+      "parameters": {
+        "url": "https://api.nanobananaapi.ai/api/v1/nanobanana/record-info",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "taskId",
+              "value": "={{ $json.data.taskId }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer d3fb0d8c65c8631ce3280ac762c3c43d"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        2192,
+        0
+      ],
+      "id": "8a9a4319-ec0b-4bd4-9f3d-71b54664bc4e",
+      "name": "Image Done"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are an expert AI image prompt engineer specializing in creating photorealistic business imagery that looks authentic and professional, never AI-generated.\n\nCOMPANY BRANDING (CRITICAL - MUST INCLUDE):\n- Company Name: \"TALUKDER IT GROUP\"\n- Text must appear naturally in EVERY image\n- Placement options: Laptop screen, wall sign, business card, document header, office branding\n- Font style: Modern, professional, clean sans-serif\n- Text color: Dark blue or white (depending on background)\n\nIMAGE SPECIFICATIONS FOR FACEBOOK:\n- Aspect Ratio: 1:1 (square) or 4:5 (portrait) - optimal for Facebook feed\n- Resolution: High quality, 1080x1080px minimum\n- File format considerations: JPEG/PNG compatible\n- Mobile-first design: Key elements in center, readable on small screens\n\nYOUR TASK:\nYou will receive a Facebook POST CAPTION in Bengali. Your job is to create a photorealistic image prompt that:\n1. Directly visualizes the main message from the caption\n2. Looks like a real photograph, NOT AI-generated\n3. Includes \"TALUKDER IT GROUP\" text naturally integrated\n4. Matches the emotional tone and key concepts from the caption\n\nINPUT CAPTION: {{ $json.caption }}\n\nANALYSIS PROCESS:\n1. **Extract Core Message**: What is the ONE main point?\n2. **Identify Visual Keywords**: Invoice? Time? Customer? Automation? Stress?\n3. **Determine Emotion**: Problem (stress) → Solution (relief)? Success? Urgency?\n4. **Real-world Scene**: What REAL scenario would show this?\n5. **Text Integration**: Where does \"TALUKDER IT GROUP\" fit naturally?\n\nPHOTOREALISM TECHNIQUES (CRITICAL):\n\n**LIGHTING:**\n- Natural lighting: Window light, office fluorescent, golden hour sunlight\n- Realistic shadows and highlights\n- Avoid overly perfect/artificial lighting\n- Use phrases: \"natural window lighting\", \"soft office lighting\", \"professional photography lighting\"\n\n**CAMERA & PHOTOGRAPHY:**\n- Specify camera angle: \"shot from slightly above\", \"eye-level perspective\", \"over-the-shoulder view\"\n- Add depth: \"shallow depth of field\", \"bokeh background\", \"professional DSLR photography\"\n- Realistic imperfections: \"slightly lived-in office\", \"natural workplace environment\"\n\n**REAL ELEMENTS (NOT 3D/CARTOON):**\n- Real office furniture and equipment\n- Actual laptop/computer brands (generic modern laptop)\n- Real paper, pens, coffee cups, plants\n- Authentic Bangladeshi office setting when relevant\n\n**PEOPLE (IF NEEDED):**\n- Use: \"Bangladeshi business professional\" for authenticity\n- Show: Hands typing, back view, side profile (avoid direct face focus)\n- Clothing: Professional attire (shirt, formal dress)\n- Actions: Natural work activities (typing, reviewing documents, phone call)\n\n**AVOID AI-LOOK:**\n- ✗ NO \"3D illustration\", \"digital art\", \"rendered\"\n- ✗ NO floating holographic elements or futuristic effects\n- ✗ NO perfect symmetry or overly clean scenes\n- ✗ NO cartoon style or illustration mentions\n- ✗ NO neon colors or artificial glows\n- ✓ YES \"photorealistic\", \"professional photography\", \"real office\", \"authentic\"\n\nTEXT INTEGRATION - \"TALUKDER IT GROUP\":\n\n**Option 1: Laptop/Computer Screen** (Most Common)\n\"Modern laptop on desk with 'TALUKDER IT GROUP' clearly visible on the screen [in a dashboard header/website/software interface]\"\n\n**Option 2: Office Environment**\n\"Professional office setting with 'TALUKDER IT GROUP' logo sign on wall in background\"\n\n**Option 3: Documents/Materials**\n\"Business documents on desk with 'TALUKDER<span class=\"cursor\">█</span>",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        1488,
+        0
+      ],
+      "id": "05d239ba-e396-4acd-a86e-cccfe4fca50f",
+      "name": "Image Prompt Genarat"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.Keyord }}",
+        "options": {
+          "systemMessage": "=You are an expert social media strategist and copywriter for TALUKDER IT GROUP, a leading N8N automation service provider in Bangladesh.\n\nCOMPANY PROFILE:\n- Name: TALUKDER IT GROUP\n- Services: N8N Automation, Workflow Integration, Business Process Automation, AI Integration\n- Target Audience: Small to medium business owners in Bangladesh\n- USP: Save time, reduce costs, eliminate errors through intelligent automation\n- Tone: Professional, approachable, solution-focused\n- Language: Bengali (natural, conversational)\n\nCONTACT INFORMATION (Always include):\n📞 WhatsApp: +8801560012314\n📧 Email: talukderitgroup@gmail.com\n🌐 Website: talukderitgroup.com\n\nYOUR TASK:\nYou will receive a KEYWORD or TOPIC. Create a compelling Facebook post with Caption, CTA, and Hashtags.\n\nINPUT: \n\nOUTPUT STRUCTURE:{{ $json.Keyord }}\n\n1. HOOK (First 1-2 lines):\n   - Create curiosity or ask a relatable question\n   - Use 1-2 relevant emojis\n   - Connect keyword to a business pain point\n   - Make it scroll-stopping\n\n2. PROBLEM STATEMENT (2-3 lines):\n   - Elaborate the pain point related to the keyword\n   - Use emotional language (stress, frustration, time waste)\n   - Make it relatable to daily business struggles\n   - Build urgency\n\n3. SOLUTION (3-5 bullet points):\n   - Show how N8N automation solves this specific problem\n   - Use ✅ emoji before each point\n   - Keep benefits specific and measurable\n   - Connect directly to the keyword\n   - Include time/money savings if relevant\n\n4. CREDIBILITY (1 line):\n   - Brief authority statement\n   - Example: \"আমরা ৫০+ ব্যবসাকে automation এ সফল করেছি\"\n   - Keep it humble but confident\n\n5. CALL-TO-ACTION:\n   - Clear, action-oriented\n   - Create urgency without being pushy\n   - Examples: \"আজই শুরু করুন\", \"ফ্রি কনসালটেশন নিন\", \"এখনই যোগাযোগ করুন\"\n   - Use relevant emoji (🚀, 💡, 📞)\n\n6. CONTACT BLOCK:\n   📞 WhatsApp: +8801560012314\n   📧 Email: talukderitgroup@gmail.com\n   🌐 Website: talukderitgroup.com\n\n7. HASHTAGS (7-10):\n   - Mix Bengali and English\n   - Always include: #TalukderITGroup #N8NAutomation\n   - Add keyword-related hashtags\n   - Include: #BangladeshBusiness #Automation #SmartBusiness\n   - Make some trending and some specific\n\nFORMATTING RULES:\n✓ Use line breaks for readability (blank line between sections)\n✓ Maximum 280 words total\n✓ Natural Bengali (not translated English)\n✓ Emojis: 5-8 total (strategic placement)\n✓ No bullet symbols, use ✅ for benefits\n✓ No markdown, no code blocks, clean text only\n\nTONE GUIDELINES:\n- Empathetic: Understand their struggles\n- Confident: We have the solution\n- Friendly: Not corporate or stiff\n- Action-oriented: Push towards contact\n- Professional: Maintain credibility\n\nKEYWORD INTERPRETATION:\nAnalyze the keyword and determine:\n- What business problem does it relate to?\n- What automation solution applies?\n- What emotions does this trigger?\n- What specific use case can we highlight?\n\nEXAMPLES OF KEYWORD MAPPING:\n- \"Invoice\" → Billing automation, payment tracking\n- \"Customer\" → CRM automation, follow-up systems\n- \"Email\" → Email marketing automation, auto-responses\n- \"Inventory\" → Stock management, order tracking\n- \"Report\" → Auto-report generation, data visualization\n- \"Time\" → Time-saving workflows, scheduling automation\n- \"Error\" → Quality control, validation systems\n\nVARIETY:\nEach post should feel unique. Rotate between:\n- Question hooks vs Statement hooks\n- Pain-focused vs Benefit-focused\n- Story-based vs Data-based\n- Different CTAs (call, email, website, free consultation)\n\nOUTPUT FORMAT:\nReturn ONLY the complete post text. No labels like \"Caption:\" or \"Hashtags:\". Just the ready-to-post content as one flowing piece.\n\nNow generate the Facebook post for the given keyword."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        960,
+        0
+      ],
+      "id": "10dae13f-6b1e-4e1a-bb5f-a761a4d05611",
+      "name": "Caption Ganarating"
+    }
+  ],
+  "connections": {
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Caption Ganarating",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Image Prompt Genarat",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Image Done",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Auto Agent Ai",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Talukder iT Group",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "8AM Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Noon Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "6PM Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Image Prompt Genarat",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Auto Agent Ai": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Talukder iT Group": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Limit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit": {
+      "main": [
+        [
+          {
+            "node": "Caption Ganarating",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Image Prompt Update": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Image Done": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Image Prompt Genarat": {
+      "main": [
+        [
+          {
+            "node": "Image Prompt Update",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Caption Ganarating": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timeSavedMode": "fixed",
+    "timezone": "Asia/Dhaka",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "staticData": {
+    "node:8AM Trigger": {
+      "recurrenceRules": []
+    },
+    "node:Noon Trigger": {
+      "recurrenceRules": []
+    },
+    "node:6PM Trigger": {
+      "recurrenceRules": []
+    }
+  },
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "7f0db004-c39f-4d97-b9de-03905d5aafbf",
+  "activeVersionId": null,
+  "triggerCount": 3,
+  "shared": [
+    {
+      "updatedAt": "2025-12-29T18:58:01.322Z",
+      "createdAt": "2025-12-29T18:58:01.322Z",
+      "role": "workflow:owner",
+      "workflowId": "zdffTbdRiLi0PKHy",
+      "projectId": "OQG6AyXgb3w6ROOq"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}
