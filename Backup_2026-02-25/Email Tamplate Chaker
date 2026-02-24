@@ -1,0 +1,157 @@
+{
+  "updatedAt": "2026-02-03T23:28:26.702Z",
+  "createdAt": "2025-10-27T06:26:01.325Z",
+  "id": "7ANP2aITaYNTt8hS",
+  "name": "Email Tamplate Chaker",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -368,
+        -16
+      ],
+      "id": "47ba08aa-c2bf-4763-b6df-2aba0541eae6",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "sendTo": "=ashiktalukder9043@gmail.com",
+        "subject": "=Verified B2B Contact Lists for Smarter Outreach",
+        "message": "=<!doctype html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <title>Backup Completed</title>\n</head>\n<body style=\"margin:0;padding:0;background:#f6f8fb;font-family:Arial,Helvetica,sans-serif;\">\n  <table role=\"presentation\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" style=\"background:#f6f8fb;padding:20px 0;\">\n    <tr>\n      <td align=\"center\">\n        <table role=\"presentation\" width=\"620\" cellspacing=\"0\" cellpadding=\"0\" style=\"background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,0.06);\">\n          \n          <!-- Header -->\n          <tr>\n            <td style=\"padding:22px 26px;background:#0b5cff;color:#ffffff;\">\n              <div style=\"font-size:18px;font-weight:700;letter-spacing:0.2px;\">\n                ✅ Backup Completed\n              </div>\n              <div style=\"margin-top:6px;font-size:13px;opacity:0.9;\">\n                Your daily backup finished successfully.\n              </div>\n            </td>\n          </tr>\n\n          <!-- Content -->\n          <tr>\n            <td style=\"padding:22px 26px;color:#0f172a;\">\n              <div style=\"font-size:14px;line-height:1.6;\">\n                <strong>Summary</strong><br/>\n                <span style=\"color:#475569;\">\n                  {{SUMMARY_TEXT}}\n                </span>\n              </div>\n\n              <div style=\"height:14px;\"></div>\n\n              <!-- Details box -->\n              <table role=\"presentation\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" style=\"background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;\">\n                <tr>\n                  <td style=\"padding:14px 14px;\">\n                    <table role=\"presentation\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\">\n                      <tr>\n                        <td style=\"padding:6px 0;font-size:13px;color:#334155;\">\n                          <strong>Date:</strong> <span style=\"color:#0f172a;\">{{DATE}}</span>\n                        </td>\n                      </tr>\n                      <tr>\n                        <td style=\"padding:6px 0;font-size:13px;color:#334155;\">\n                          <strong>Folder Name:</strong> <span style=\"color:#0f172a;\">{{FOLDER_NAME}}</span>\n                        </td>\n                      </tr>\n                      <tr>\n                        <td style=\"padding:6px 0;font-size:13px;color:#334155;\">\n                          <strong>Total Size:</strong> <span style=\"color:#0f172a;\">{{TOTAL_SIZE}}</span>\n                        </td>\n                      </tr>\n                    </table>\n                  </td>\n                </tr>\n              </table>\n\n              <div style=\"height:16px;\"></div>\n\n              <div style=\"font-size:12px;color:#64748b;line-height:1.6;\">\n                If you didn’t run this backup, please check your server access and automation settings.\n              </div>\n            </td>\n          </tr>\n\n          <!-- Footer -->\n          <tr>\n            <td style=\"padding:16px 26px;background:#ffffff;border-top:1px solid #eef2f7;color:#94a3b8;font-size:12px;\">\n              <div>\n                Sent automatically by your Backup Automation System\n              </div>\n            </td>\n          </tr>\n\n        </table>\n\n        <div style=\"height:14px;\"></div>\n\n        <div style=\"font-size:12px;color:#94a3b8;\">\n          © {{YEAR}} Backup Monitor\n        </div>\n\n      </td>\n    </tr>\n  </table>\n</body>\n</html>",
+        "options": {
+          "appendAttribution": false,
+          "senderName": "B2B GDC",
+          "replyTo": "ashiktalukder9043@gmail.com"
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        256,
+        -16
+      ],
+      "id": "bb4098f7-a845-4d3f-93fd-9da413f05511",
+      "name": "Send a message",
+      "webhookId": "f5c7dfb7-32f9-4dcb-886f-1975cfb6e4fa",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "F4MZBexAGBJF5N0V",
+          "name": "ashiktalukder9043@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1pagRKWB87IRzIfvqZJ8vXThl0i0u3hpYLTHAoqFvouA",
+          "mode": "list",
+          "cachedResultName": "Tast 999- Email",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1pagRKWB87IRzIfvqZJ8vXThl0i0u3hpYLTHAoqFvouA/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Email",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1pagRKWB87IRzIfvqZJ8vXThl0i0u3hpYLTHAoqFvouA/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -160,
+        -16
+      ],
+      "id": "1d617649-9659-48cc-ac72-63701ff4d22b",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "LyUMa6lnJRFCagwx",
+          "name": "ashiktalukder9043@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        48,
+        -16
+      ],
+      "id": "3cc5d6b1-d4cc-42b3-8d4d-e1e65e3d79bb",
+      "name": "Loop Over Items"
+    }
+  ],
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "deb8730c-c6b7-4611-935a-72ca6cddc935",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2025-10-27T06:26:01.360Z",
+      "createdAt": "2025-10-27T06:26:01.360Z",
+      "role": "workflow:owner",
+      "workflowId": "7ANP2aITaYNTt8hS",
+      "projectId": "OQG6AyXgb3w6ROOq"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}
