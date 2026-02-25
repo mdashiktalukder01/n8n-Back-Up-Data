@@ -1,0 +1,435 @@
+{
+  "updatedAt": "2025-12-18T19:39:36.950Z",
+  "createdAt": "2025-11-01T11:04:27.579Z",
+  "id": "dSVY1W6GwxynpR8z",
+  "name": "Workflow 3: Follow-up Sender",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1pagRKWB87IRzIfvqZJ8vXThl0i0u3hpYLTHAoqFvouA",
+          "mode": "list",
+          "cachedResultName": "Tast 999- Email",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1pagRKWB87IRzIfvqZJ8vXThl0i0u3hpYLTHAoqFvouA/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Email",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1pagRKWB87IRzIfvqZJ8vXThl0i0u3hpYLTHAoqFvouA/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        224,
+        16
+      ],
+      "id": "bd5c8dd3-607f-46a1-9c84-985fa4c68480",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "LyUMa6lnJRFCagwx",
+          "name": "ashiktalukder9043@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst results = [];\nconst today = new Date();\nconst oneMinuteAgo = new Date(today.getTime() - (1 * 60 * 1000));\n\nfor (const item of items) {\n  const status = item.json.Status;\n  const firstEmailDate = item.json.First_Email_Date;\n  const replyReceived = item.json.Reply_Received;\n  const followupSent = item.json.Follow_up_Sent;\n  \n  // Check conditions\n  if (status === \"First Email Sent\" && \n      replyReceived === \"FALSE\" && \n      followupSent === \"FALSE\" &&\n      firstEmailDate) {\n    \n    const emailDate = new Date(firstEmailDate);\n    \n    // যদি ১ মিনিট বা তার বেশি হয়\n    if (emailDate <= oneMinuteAgo) {\n      results.push({\n        json: item.json\n      });\n    }\n  }\n}\n\nreturn results;\n\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        672,
+        16
+      ],
+      "id": "19af44f1-39fc-43a5-b99b-8646c674f0db",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Get row(s) in sheet').item.json.Gmail }}",
+        "subject": "Verified B2B Contact Lists for Smarter Outreach",
+        "message": "=<!DOCTYPE html> <html lang=\"en\"> <head>     <meta charset=\"UTF-8\">     <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">     <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">     <title>Email Template</title> </head> <body style=\"margin: 0; padding: 0; font-family: Arial, Helvetica, sans-serif; background-color: #f4f4f4;\">     <table role=\"presentation\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" width=\"100%\" style=\"background-color: #f4f4f4;\">         <tr>             <td style=\"padding: 20px 0;\">                 <!-- Main Container -->                 <table role=\"presentation\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" width=\"600\" style=\"margin: 0 auto; background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); max-width: 600px;\">                                          <!-- Header Section -->                     <tr>                         <td style=\"background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; text-align: center; border-radius: 8px 8px 0 0;\">                             <h1 style=\"margin: 0; color: #ffffff; font-size: 24px; font-weight: 600; letter-spacing: 0.5px;\">Verified B2B Lead Lists</h1>                         </td>                     </tr>                      <!-- Main Body Content -->                     <tr>                         <td style=\"padding: 40px 30px;\">                             <!-- Greeting -->                             <p style=\"margin: 0 0 20px 0; font-size: 16px; line-height: 1.6; color: #333333;\">                                 Hi <strong>{{ $('Get row(s) in sheet').item.json.Name }}</strong>,                             </p>                              <!-- Introduction -->                             <p style=\"margin: 0 0 20px 0; font-size: 15px; line-height: 1.6; color: #555555;\">                                 I am a <strong>Contact List Specialist</strong> & <strong style=\"color: #667eea;\">Level 2 Seller on Fiverr</strong>. I help businesses connect with their ideal prospects by providing <strong>100% verified email lists</strong> that drive better conversions.                             </p>                              <!-- Value Proposition -->                             <p style=\"margin: 0 0 30px 0; font-size: 15px; line-height: 1.6; color: #555555;\">                                 I'd love to offer you a <strong style=\"color: #667eea;\">free 50 sample leads</strong> so you can see how my lists boost outreach success.                             </p>                              <!-- CTA Button -->                             <table role=\"presentation\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" width=\"100%\">                                 <tr>                                     <td style=\"text-align: center; padding: 10px 0 30px 0;\">                                         <a href=\"https://docs.google.com/spreadsheets/d/1OhkEgdmyZl5XkFXIEm9V__lULba_h5VSyFbEu7ov5T4/edit?gid=0#gid=0\" target=\"_blank\" style=\"display: inline-block; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #ffffff; font-size: 16px; font-weight: 600; text-decoration: none; padding: 14px 35px; border-radius: 50px; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);\">                                             📊 Get Sample Leads                                         </a>                                     </td>                                 </tr>                             </table>                              <!-- Divider Line -->                             <table role=\"presentation\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" width=\"100%\">                                 <tr>                                     <td style=\"padding: 20px 0;\">                                         <div style=\"height: 1px; background-color: #e0e0e0;\"></div>                                     </td>                                 </tr>                             </table>                              <!-- Signature Section -->                             <table role=\"presentation\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" width=\"100%\">                                 <tr>                                     <td style=\"padding-top: 10px;\">                                         <p style=\"margin: 0 0 15px 0; font-size: 15px; line-height: 1.5; color: #555555;\">                                             Thanks & Warm Regards,                                         </p>                                         <p style=\"margin: 0 0 5px 0; font-size: 18px; font-weight: 700; color: #333333;\">                                             Ashik Talukder                                         </p>                                         <p style=\"margin: 0 0 10px 0; font-size: 13px; line-height: 1.5; color: #667eea; font-weight: 600;\">                                             🏆 Top Rated on Upwork | Level 2 Seller on Fiverr                                         </p>                                         <p style=\"margin: 0 0 5px 0; font-size: 14px; line-height: 1.5; color: #555555;\">                                             📧 <a href=\"mailto:ashiktalukder336@gmail.com\" style=\"color: #667eea; text-decoration: none;\">ashiktalukder336@gmail.com</a>                                         </p>                                         <p style=\"margin: 0 0 20px 0; font-size: 14px; line-height: 1.5; color: #555555;\">                                             🌐 <a href=\"https://www.b2bgdc.com\" target=\"_blank\" style=\"color: #667eea; text-decoration: none;\">www.b2bgdc.com</a>                                         </p>                                     </td>                                 </tr>                             </table>                              <!-- Social Media Icons -->                             <table role=\"presentation\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" width=\"100%\">                                 <tr>                                     <td style=\"text-align: center; padding: 20px 0 0 0;\">                                         <p style=\"margin: 0 0 15px 0; font-size: 14px; color: #888888;\">Connect with me:</p>                                         <table role=\"presentation\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" style=\"margin: 0 auto;\">                                             <tr>                                                 <!-- LinkedIn -->                                                 <td style=\"padding: 0 10px;\">                                                     <a href=\"https://www.linkedin.com/in/md-ashik-talukder-7a9a2b280/\" target=\"_blank\" style=\"display: inline-block;\">                                                         <img src=\"https://cdn-icons-png.flaticon.com/512/174/174857.png\" alt=\"LinkedIn\" width=\"36\" height=\"36\" style=\"display: block; border: 0; border-radius: 50%;\">                                                     </a>                                                 </td>                                                 <!-- Facebook -->                                                 <td style=\"padding: 0 10px;\">                                                     <a href=\"https://www.facebook.com/mdashiktalukder01\" target=\"_blank\" style=\"display: inline-block;\">                                                         <img src=\"https://cdn-icons-png.flaticon.com/512/174/174848.png\" alt=\"Facebook\" width=\"36\" height=\"36\" style=\"display: block; border: 0; border-radius: 50%;\">                                                     </a>                                                 </td>                                                 <!-- WhatsApp -->                                                 <td style=\"padding: 0 10px;\">                                                     <a href=\"https://wa.me/+8801707159043\" target=\"_blank\" style=\"display: inline-block;\">                                                         <img src=\"https://cdn-icons-png.flaticon.com/512/174/174879.png\" alt=\"WhatsApp\" width=\"36\" height=\"36\" style=\"display: block; border: 0; border-radius: 50%;\">                                                     </a>                                                 </td>                                             </tr>                                         </table>                                     </td>                                 </tr>                             </table>                          </td>                     </tr>                      <!-- Footer Section -->                     <tr>                         <td style=\"background-color: #f8f9fa; padding: 20px 30px; text-align: center; border-radius: 0 0 8px 8px;\">                             <p style=\"margin: 0 0 8px 0; font-size: 12px; line-height: 1.5; color: #888888;\">                                 This email was sent to help you grow your business with quality leads.                             </p>                             <p style=\"margin: 0; font-size: 11px; line-height: 1.4; color: #aaaaaa;\">                                 If you'd prefer not to receive these emails, you can <a href=\"#\" style=\"color: #667eea; text-decoration: underline;\">unsubscribe here</a>.                             </p>                         </td>                     </tr>                  </table>             </td>         </tr>     </table> </body> </html>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1104,
+        112
+      ],
+      "id": "716b726c-f449-4bfb-95a8-4162db793d30",
+      "name": "Send a message",
+      "webhookId": "6c6029c4-1f91-4ece-a1d6-00cf9c484a04",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "F4MZBexAGBJF5N0V",
+          "name": "ashiktalukder9043@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1pagRKWB87IRzIfvqZJ8vXThl0i0u3hpYLTHAoqFvouA",
+          "mode": "list",
+          "cachedResultName": "Tast 999- Email",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1pagRKWB87IRzIfvqZJ8vXThl0i0u3hpYLTHAoqFvouA/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Email",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1pagRKWB87IRzIfvqZJ8vXThl0i0u3hpYLTHAoqFvouA/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "row_number": 0,
+            "Follow_up_Sent": "TRUE",
+            "Follow_up_Date": "={{$now.format('yyyy-MM-dd')}}",
+            "Status": "Follow-up Sent"
+          },
+          "matchingColumns": [
+            "Gmail"
+          ],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Title ",
+              "displayName": "Title ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Gmail",
+              "displayName": "Gmail",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "First_Email_Date",
+              "displayName": "First_Email_Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Reply_Received",
+              "displayName": "Reply_Received",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Follow_up_Sent",
+              "displayName": "Follow_up_Sent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Follow_up_Date",
+              "displayName": "Follow_up_Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Message ID",
+              "displayName": "Message ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1344,
+        160
+      ],
+      "id": "611a6220-5957-40af-b78e-6266592e7a4d",
+      "name": "Update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "LyUMa6lnJRFCagwx",
+          "name": "ashiktalukder9043@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        896,
+        16
+      ],
+      "id": "ae08d3b2-3009-485a-a098-d5c172d2be14",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "jsCode": "const totalSent = $input.all().length;\nreturn [{\n  json: {\n    total_sent: totalSent,\n    date: new Date().toISOString().split('T')[0],\n    message: `আপনার ${totalSent} টি Email সফলভাবে পাঠানো হয়েছে! ✅`\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1120,
+        -96
+      ],
+      "id": "bec14f7b-319d-4d23-b331-793993400b4c",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "sendTo": "ashiktalukder336@gmail.com",
+        "subject": "Today Follow-up Sent",
+        "emailType": "text",
+        "message": "ddwedewwdwdw",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1344,
+        -128
+      ],
+      "id": "22ed91ec-4ef6-4cdc-be6c-9e21dedb4e22",
+      "name": "Send a message1",
+      "webhookId": "444ab8f0-ab09-4e3c-b0c7-02149994cd7d",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "X4u1ECY8sswbOl3A",
+          "name": "ashiktalukder336@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "maxItems": 250
+      },
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        448,
+        16
+      ],
+      "id": "889fd9ab-4d20-4d09-a3de-7db1f6e80b36",
+      "name": "Limit"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        16
+      ],
+      "id": "5b35e609-9759-42e7-a649-b4d505e69c6b",
+      "name": "Schedule Trigger"
+    }
+  ],
+  "connections": {
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Limit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Send a message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": []
+    }
+  },
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "32156328-9d7a-49b2-93af-ac9a4e2a0b1e",
+  "activeVersionId": null,
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2025-11-01T11:04:27.581Z",
+      "createdAt": "2025-11-01T11:04:27.581Z",
+      "role": "workflow:owner",
+      "workflowId": "dSVY1W6GwxynpR8z",
+      "projectId": "OQG6AyXgb3w6ROOq"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}
