@@ -1,0 +1,1884 @@
+{
+  "updatedAt": "2026-02-03T18:31:03.842Z",
+  "createdAt": "2025-12-29T09:47:47.987Z",
+  "id": "gbBTWBXn8cP1vcR9",
+  "name": "IG Automation",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "multipleMethods": true,
+        "path": "8dcdcd05-d199-4f21-a8b2-d97df047b87d",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        1344,
+        416
+      ],
+      "id": "d3d384e2-c0ba-4589-8d6a-b8c44394c3ff",
+      "name": "Webhook",
+      "webhookId": "8dcdcd05-d199-4f21-a8b2-d97df047b87d"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "b9dcf9a0-630e-451f-9002-9843123b6f14",
+              "leftValue": "={{ $json.query['hub.challenge'] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "f645a036-2f34-49ae-a372-1b1f22b550ba",
+              "leftValue": "={{ $json.query['hub.mode'] }}",
+              "rightValue": "subscribe",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1568,
+        320
+      ],
+      "id": "eb294a4e-7ec7-479f-b5e7-85030b072378",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Webhook').item.json.body.entry[0].messaging[0].message.attachments[0].payload.url }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2752,
+        272
+      ],
+      "id": "05a89b11-2156-4e22-9971-48763ed31128",
+      "name": "HTTP Request4"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Webhook').item.json.body.entry[0].messaging[0].message.attachments[0].type }}",
+                    "rightValue": "image",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "1daf0664-a824-4438-ba7f-5b2ccf1b7e4c"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "image"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "c9f9f9aa-3897-4cd7-a9c2-ba850ecce4d9",
+                    "leftValue": "={{ $('Webhook').item.json.body.entry[0].messaging[0].message.text }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Taxt"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "55dce9ab-094c-424f-a6e9-5439098f4d7b",
+                    "leftValue": "={{ $json.body.entry[0].messaging[0].message.attachments[0].type }}",
+                    "rightValue": "audio",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Voice"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        2416,
+        496
+      ],
+      "id": "db3e654d-3d21-4711-acbb-af5dc84f6366",
+      "name": "Switch2"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "dece9eb1-a5b5-4cb0-b2d8-5ead7d6137fb",
+              "name": "['0'].content[0].text",
+              "value": "={{ $json['0'].content[0].text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3200,
+        272
+      ],
+      "id": "958c4f6f-4e4a-4f3f-b86e-dfc164d6507c",
+      "name": "Image Quyery2"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.body.entry[0].messaging[0].message.attachments[0].payload.url }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2752,
+        768
+      ],
+      "id": "764bb2e5-4a3c-42cf-bcca-665a1bca7f0f",
+      "name": "HTTP Request5"
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "operation": "analyze",
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o",
+          "mode": "list",
+          "cachedResultName": "GPT-4O"
+        },
+        "inputType": "base64",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.1,
+      "position": [
+        2976,
+        272
+      ],
+      "id": "571a13bc-41f2-41f9-9372-1192f10e404b",
+      "name": "Analyze image",
+      "credentials": {
+        "openAiApi": {
+          "id": "7prG4gdV03YlxXfl",
+          "name": "Zakaria Vai Api"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "audio",
+        "operation": "transcribe",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.1,
+      "position": [
+        2976,
+        768
+      ],
+      "id": "08eea78f-f1b6-4e90-b991-c1910f31dc51",
+      "name": "Transcribe a recording",
+      "credentials": {
+        "openAiApi": {
+          "id": "7prG4gdV03YlxXfl",
+          "name": "Zakaria Vai Api"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c808071e-5f14-4892-8221-0858e2314e9e",
+              "name": "query",
+              "value": "={{ $json.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3200,
+        768
+      ],
+      "id": "eab617ec-4785-4165-af63-2ef5dd0d66db",
+      "name": "Audio inquyrre"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "572175d1-681b-4e85-b8d3-8b281374a9d7",
+              "name": "data.body.entry[0].messaging[0].message.text",
+              "value": "={{ $('Webhook').item.json.body.entry[0].messaging[0].message.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3200,
+        512
+      ],
+      "id": "8ee4ea54-0d7b-4c1b-bb25-6c1617c78d47",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "dd3a2b21-a0ce-484a-bb1d-fd9614598f37",
+              "leftValue": "={{ $json.Stats }}",
+              "rightValue": "Run",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        2016,
+        512
+      ],
+      "id": "76f799c5-de3b-4550-b10a-f470ad3b9266",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "url": "https://freelancersshop.com/",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.3,
+      "position": [
+        2800,
+        1552
+      ],
+      "id": "77a544a9-817e-4373-94f1-bdea7bad5895",
+      "name": "freelancers Shop"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dateTime",
+      "typeVersion": 2,
+      "position": [
+        3648,
+        560
+      ],
+      "id": "32e84000-1923-4760-8eb7-690cc2a274a4",
+      "name": "Date & Time"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "message_buffer",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "psid",
+              "keyValue": "={{ $('Webhook').item.json.body.entry[0].messaging[0].sender.id }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        3872,
+        560
+      ],
+      "id": "31b9913a-cb93-49fe-9877-405e59104ebb",
+      "name": "Get a row",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "TmSIzJy1PSYJ8AM0",
+          "name": "ashiktalukder9043@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "acd27ffa-68a7-4d63-b936-bf26fc078167",
+              "leftValue": "={{ $json.psid }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notExists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        4096,
+        560
+      ],
+      "id": "f90dad5e-069b-46d7-a02d-d5955b8376b8",
+      "name": "If2"
+    },
+    {
+      "parameters": {
+        "tableId": "message_buffer",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "psid",
+              "fieldValue": "={{ $('Webhook').item.json.body.entry[0].messaging[0].sender.id }}"
+            },
+            {
+              "fieldId": "buffer_text",
+              "fieldValue": "={{ $('Merge').item.json.data.body.entry[0].messaging[0].message.text }}"
+            },
+            {
+              "fieldId": "status",
+              "fieldValue": "pending"
+            },
+            {
+              "fieldId": "last_message_at",
+              "fieldValue": "={{ $now }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        4320,
+        368
+      ],
+      "id": "eca7a726-7391-4fee-a1fd-4493f4125d3e",
+      "name": "Creat row",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "TmSIzJy1PSYJ8AM0",
+          "name": "ashiktalukder9043@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "message_buffer",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "psid",
+              "condition": "eq",
+              "keyValue": "={{ $json.psid }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "buffer_text",
+              "fieldValue": "={{ $('Get a row').item.json.buffer_text }},"
+            },
+            {
+              "fieldId": "last_message_at",
+              "fieldValue": "={{ $('Date & Time').item.json.currentDate }}"
+            },
+            {
+              "fieldId": "status",
+              "fieldValue": "pending"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        4336,
+        752
+      ],
+      "id": "7ab758e5-bf5d-46bc-9627-638f2ee044ae",
+      "name": "Updat row",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "TmSIzJy1PSYJ8AM0",
+          "name": "ashiktalukder9043@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "Sand Masanger \n",
+        "height": 752,
+        "width": 2848,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        4416,
+        -544
+      ],
+      "typeVersion": 1,
+      "id": "7e919933-47d5-4958-b5f2-4068c5788703",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "message_buffer"
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1632,
+        1344
+      ],
+      "id": "7978e75c-142c-4707-9ab7-708777e6c4e9",
+      "name": "Get many rows",
+      "credentials": {
+        "supabaseApi": {
+          "id": "TmSIzJy1PSYJ8AM0",
+          "name": "ashiktalukder9043@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "44add647-6a3c-4810-bc44-7ec40ff37b5b",
+              "leftValue": "={{ $json.diffsec }}",
+              "rightValue": "=10",
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        2304,
+        1344
+      ],
+      "id": "26eaafa8-98d5-4d5f-a891-9dac644b9390",
+      "name": "If3"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "85ea3eac-2360-466c-9dd0-af979de723d0",
+              "name": "diffsec",
+              "value": "={{ (Date.now() - new Date($json.last_message_at).getTime()) / 1000 }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2080,
+        1344
+      ],
+      "id": "d22d6330-8322-4ce1-8b2a-e8d9fd12eea0",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1_UrqeALKrgc8hsPK_x99RlRtxxIPTz18bMgxVcwUWUQ",
+          "mode": "list",
+          "cachedResultName": "Ai Automation ",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1_UrqeALKrgc8hsPK_x99RlRtxxIPTz18bMgxVcwUWUQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Automation Contolar",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1_UrqeALKrgc8hsPK_x99RlRtxxIPTz18bMgxVcwUWUQ/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1792,
+        512
+      ],
+      "id": "d23ed23e-c93b-4ab1-b918-c4b51dfeab44",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "LyUMa6lnJRFCagwx",
+          "name": "ashiktalukder9043@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "numberInputs": 3
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        3456,
+        496
+      ],
+      "id": "c8cb3c4e-3ee6-46f5-a5b8-c4ad4cdabfd6",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "psid",
+        "include": "allOtherFields",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        1856,
+        1344
+      ],
+      "id": "f7780212-4610-456a-a537-94e5809e49db",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "tableId": "message_buffer",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "psid",
+              "condition": "eq",
+              "keyValue": "={{ $json.recipient_id }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        3872,
+        1344
+      ],
+      "id": "5075a80e-cdb4-4222-8ef1-333baaf05163",
+      "name": "Delete a row",
+      "credentials": {
+        "supabaseApi": {
+          "id": "TmSIzJy1PSYJ8AM0",
+          "name": "ashiktalukder9043@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "seconds",
+              "secondsInterval": 15
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        1408,
+        1344
+      ],
+      "id": "ac8eb193-c212-46f6-afa0-bc87a810901e",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://graph.facebook.com/v20.0/me/messages\n",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "access_token",
+              "value": "EAAVz7I6HQK0BQlPVC5FkxpqMuXhdUJek5CilFa9YL9qSVRxmgmCAahCPnymeD83D3m6QzDYUW5F53Xq6leBhmNshrWq0QvGGhG4MD0hQn95z09ObcMBOfbclLxSzo2PJ6MDx8xxFlKNN6MRqMng3M6NDosGW2GybG65W5A62Jfv03dQJXU4P34DZCFiWKtqhO"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"recipient\": { \"id\": \"{{ $('Webhook').item.json.body.entry[0].messaging[0].sender.id }}\" },\n  \"sender_action\": \"mark_seen\"\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2240,
+        496
+      ],
+      "id": "c9a27753-fb8f-46f2-8533-4894ae1878d3",
+      "name": "mark_seen"
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolDescription": "Retrieve the most relevant FreelancersShop product/policy info from Pinecone (price, stock, variants, links). Use for any product inquiry; never guess if info is missing.\n",
+        "pineconeIndex": {
+          "__rl": true,
+          "value": "freelancersshop",
+          "mode": "list",
+          "cachedResultName": "freelancersshop"
+        },
+        "topK": 5,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStorePinecone",
+      "typeVersion": 1.3,
+      "position": [
+        2912,
+        1552
+      ],
+      "id": "a46e82d9-ba0e-462a-aec6-012a290ab14e",
+      "name": "Pinecone Vector Store1",
+      "credentials": {
+        "pineconeApi": {
+          "id": "hqsjsagVa1VxJckJ",
+          "name": "ashiktalukder9043@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        3024,
+        1728
+      ],
+      "id": "5318d537-6b4f-4b37-b80e-bcdfc5b5a3f5",
+      "name": "Embeddings OpenAI1",
+      "credentials": {
+        "openAiApi": {
+          "id": "7prG4gdV03YlxXfl",
+          "name": "Zakaria Vai Api"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "0409168b-c9ad-46b5-a7b0-85810a3db783",
+              "leftValue": "={{ $json.body.entry[0].messaging[0].message.is_echo }}",
+              "rightValue": " true",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1568,
+        512
+      ],
+      "id": "297e98e7-0204-4a19-ae10-19dda4cc2c1f",
+      "name": "If4"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1xJr0O4K4kuZmALKvGVrUahiHMsaqoR_p5oKocoP6Zh4",
+          "mode": "list",
+          "cachedResultName": "Freelancers Shop",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1xJr0O4K4kuZmALKvGVrUahiHMsaqoR_p5oKocoP6Zh4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1356201205,
+          "mode": "list",
+          "cachedResultName": "Costomar Data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1xJr0O4K4kuZmALKvGVrUahiHMsaqoR_p5oKocoP6Zh4/edit#gid=1356201205"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Castomar ID",
+              "lookupValue": "={{ $json.recipient_id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        4304,
+        1344
+      ],
+      "id": "d52164a2-48f0-4c21-b0b3-05d9e0c5dcbc",
+      "name": "Get row(s) in sheet1",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "LyUMa6lnJRFCagwx",
+          "name": "ashiktalukder9043@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "e2821fea-0b75-49ea-a540-3d91c282261c",
+              "leftValue": "={{ $json['Castomar ID'] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notExists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        4528,
+        1344
+      ],
+      "id": "c3ad6c05-8cef-4a6c-a97c-7e0c43580e4d",
+      "name": "If6"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1xJr0O4K4kuZmALKvGVrUahiHMsaqoR_p5oKocoP6Zh4",
+          "mode": "list",
+          "cachedResultName": "Freelancers Shop",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1xJr0O4K4kuZmALKvGVrUahiHMsaqoR_p5oKocoP6Zh4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1356201205,
+          "mode": "list",
+          "cachedResultName": "Costomar Data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1xJr0O4K4kuZmALKvGVrUahiHMsaqoR_p5oKocoP6Zh4/edit#gid=1356201205"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Date ": "={{ $now }}",
+            "Castomar ID": "={{ $('typing_of').item.json.recipient_id }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Date ",
+              "displayName": "Date ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Castomar ID",
+              "displayName": "Castomar ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Total Order",
+              "displayName": "Total Order",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        4752,
+        1392
+      ],
+      "id": "c519c216-0a73-4c00-86ae-d6d5b940e580",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "LyUMa6lnJRFCagwx",
+          "name": "ashiktalukder9043@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1xJr0O4K4kuZmALKvGVrUahiHMsaqoR_p5oKocoP6Zh4",
+          "mode": "list",
+          "cachedResultName": "Freelancers Shop",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1xJr0O4K4kuZmALKvGVrUahiHMsaqoR_p5oKocoP6Zh4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1594525657,
+          "mode": "list",
+          "cachedResultName": "Orders",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1xJr0O4K4kuZmALKvGVrUahiHMsaqoR_p5oKocoP6Zh4/edit#gid=1594525657"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Order ID": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Order_ID', ``, 'string') }}",
+            "Name": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Name', ``, 'string') }}",
+            "Number": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Number', ``, 'string') }}",
+            "Address": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Address', ``, 'string') }}",
+            "Item": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Item', ``, 'string') }}",
+            "Color": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Color', ``, 'string') }}",
+            "Size": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Size', ``, 'string') }}",
+            "Design": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Design', ``, 'string') }}",
+            "Product": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Product', ``, 'string') }}",
+            "Price": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Price', ``, 'string') }}",
+            " Total money ": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('_Total_money_', ``, 'string') }}",
+            "Status": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Status', ``, 'string') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Order ID",
+              "displayName": "Order ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Number",
+              "displayName": "Number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Address",
+              "displayName": "Address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Item",
+              "displayName": "Item",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Color",
+              "displayName": "Color",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Size",
+              "displayName": "Size",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Design",
+              "displayName": "Design",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Product",
+              "displayName": "Product",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Price",
+              "displayName": "Price",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": " Total money ",
+              "displayName": " Total money ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        3216,
+        1600
+      ],
+      "id": "72dcc9f6-5a9b-446d-9c35-8c026408c73b",
+      "name": "Order",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "LyUMa6lnJRFCagwx",
+          "name": "ashiktalukder9043@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://graph.facebook.com/v18.0/me/messages\n",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "access_token",
+              "value": "EAAVz7I6HQK0BQjtkImKfk5sqSEYZCajdgVbj6wdHO6x8JVZAeTYJot22AAQm80kVxVMW2gIWC2fP3ig5cpuWO7cPLwHYhTs9ntHini4r5BXt3aHzO541JXNjTZA7Mimb8DJvWscuRvVNZCkctquOjSyzQtzjW2hSTBZBJyTdV6IrPZBBZBznmqLy7wtwICtxkM9trXrUhn4aZCscItFsd1F0zwkhoxzBw0ZCkUKrFNLveuB8ZD"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"recipient\": { \"id\": \"{{ $json.psid }}\" },\n  \"sender_action\": \"typing_off\"\n}\n\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        4080,
+        1344
+      ],
+      "id": "0b6a1e63-fc70-4992-bfb8-f1ca8a06c500",
+      "name": "typing_of"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "={{ $json.query['hub.challenge'] }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        1792,
+        320
+      ],
+      "id": "f909a9cb-a311-4abc-a251-34c1a2af3eb4",
+      "name": "Respond to Webhook1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://graph.facebook.com/v20.0/511298162066685/messages\n",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "access_token",
+              "value": "EAAVz7I6HQK0BQlPVC5FkxpqMuXhdUJek5CilFa9YL9qSVRxmgmCAahCPnymeD83D3m6QzDYUW5F53Xq6leBhmNshrWq0QvGGhG4MD0hQn95z09ObcMBOfbclLxSzo2PJ6MDx8xxFlKNN6MRqMng3M6NDosGW2GybG65W5A62Jfv03dQJXU4P34DZCFiWKtqhO"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"messaging_type\": \"RESPONSE\",\n  \"recipient\": { \"id\": \"{{ $('Split Out').item.json.psid }}\" },\n  \"message\": { \"text\": \"{{ $json.data }}\" }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3632,
+        1344
+      ],
+      "id": "effaead4-850a-4e18-86e7-03386d416ab3",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('Split Out').item.json.buffer_text }}\n\n",
+        "options": {
+          "systemMessage": "=You are MD Ashik Talukder,\nthe official AI-based Sales & Product Support Assistant of\nFreelanders Shop (https://freelandersshop.com) – Bangladesh.\n\n━━━━━━━━━━━━━━━━━━━━━━\n🏢 BUSINESS, OWNER & ADDRESS INFORMATION (REFERENCE ONLY)\n━━━━━━━━━━━━━━━━━━━━━━\n\n• Business Name: Freelanders Shop  \n• Owner Name: Zakaria Alam Mithu  \n• Job Title: Owner  \n\n• Business Address:\nময়মনসিংহ, ভালুকা, স্কয়ার মাস্টার বাড়ি বাজার\n\n⚠️ IMPORTANT:\n- You are NOT the owner\n- You NEVER claim to be human\n- You NEVER change or shorten the address\n- Address info is ONLY for customer reference\n\nApproved response example:\n\"স্যার, Freelanders Shop-এর ঠিকানা:\nময়মনসিংহ, ভালুকা, স্কয়ার মাস্টার বাড়ি বাজার।\nআমি প্রোডাক্ট ও অর্ডার সংক্রান্ত তথ্য দিতে পারি।\"\n\n━━━━━━━━━━━━━━━━━━━━━━\n🆔 AGENT IDENTITY (FIXED)\n━━━━━━━━━━━━━━━━━━━━━━\n\n• Agent Name: MD Ashik Talukder  \n• Role: Product-focused Sales & Support Assistant  \n• You NEVER change your name  \n\n━━━━━━━━━━━━━━━━━━━━━━\n🚨 SCOPE LIMITATION (ABSOLUTE)\n━━━━━━━━━━━━━━━━━━━━━━\n\nYou are ONLY allowed to talk about:\n✅ Freelanders Shop products  \n✅ Product price, size, color, fabric, stock (Pinecone only)  \n✅ Delivery charge  \n✅ Return & exchange policy  \n✅ Order process  \n✅ Owner name & shop address (reference only)  \n\n❌ You MUST NOT answer:\n- Personal / casual / off-topic questions\n- Freelancing / AI / automation\n- Religious / political topics\n- Owner personal life or opinions\n- Anything unrelated to Freelanders Shop products\n\n━━━━━━━━━━━━━━━━━━━━━━\n🧯 OUT-OF-SCOPE RESPONSE (FIXED)\n━━━━━━━━━━━━━━━━━━━━━━\n\nIf customer asks anything outside scope, reply ONLY:\n\n\"স্যার, আমি শুধু Freelanders Shop-এর প্রোডাক্ট সম্পর্কিত তথ্য দিতে পারি।\nমানুষের সাথে কথা বলতে চাইলে WhatsApp করুন:\n📱 01707159043\"\n\n━━━━━━━━━━━━━━━━━━━━━━\n👨‍💼 HUMAN AGENT ESCALATION\n━━━━━━━━━━━━━━━━━━━━━━\n\nIf customer says:\n“মানুষের সাথে কথা বলতে চাই / Call দিতে চাই / AI চাই না”\n\nReply ONLY:\n\n\"নিশ্চয়ই স্যার 🙂\nAgent/Maneger সাথে কথা বলতে WhatsApp করুন:\n📱 01707159043\"\n\n━━━━━━━━━━━━━━━━━━━━━━\n📦 PRODUCT DATA SOURCE (HARD RULE)\n━━━━━━━━━━━━━━━━━━━━━━\n\n• ALL product information MUST come from PINECONE VECTOR STORE  \n• Use ONLY `PINECONE_CONTEXT`  \n• NEVER guess or assume  \n\n━━━━━━━━━━━━━━━━━━━━━━\n🚚 DELIVERY CHARGE POLICY\n━━━━━━━━━━━━━━━━━━━━━━\n\n• Inside Dhaka: 60 BDT  \n• Outside Dhaka: 120 BDT  \n• Cash on Delivery available  \n\n━━━━━━━━━━━━━━━━━━━━━━\n🔁 RETURN & EXCHANGE POLICY\n━━━━━━━━━━━━━━━━━━━━━━\n\n• 3 days exchange policy  \n• Product must be unused & original condition  \n• Exchange allowed for:\n  - Size issue\n  - Manufacturing defect  \n\n❌ No return for change of mind or used items\n\n━━━━━━━━━━━━━━━━━━━━━━\n🎯 FINAL GOAL\n━━━━━━━━━━━━━━━━━━━━━━\n\nProvide accurate, honest, product-only assistance.\nAnything beyond scope → Redirect to WhatsApp human agent.\n\n━━━━━━━━━━━━━━━━━━━━━━\nSTART NOW:\nRespond ONLY about Freelanders Shop products."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        2720,
+        1328
+      ],
+      "id": "623ab2db-3866-4a12-8a64-946b65484035",
+      "name": "AI Agent1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://graph.facebook.com/v20.0/me/messages\n",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "access_token",
+              "value": "EAAVz7I6HQK0BQlPVC5FkxpqMuXhdUJek5CilFa9YL9qSVRxmgmCAahCPnymeD83D3m6QzDYUW5F53Xq6leBhmNshrWq0QvGGhG4MD0hQn95z09ObcMBOfbclLxSzo2PJ6MDx8xxFlKNN6MRqMng3M6NDosGW2GybG65W5A62Jfv03dQJXU4P34DZCFiWKtqhO"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"recipient\": { \"id\": \"{{ $('Split Out').item.json.psid }}\" },\n  \"sender_action\": \"typing_on\"\n}\n\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2912,
+        1136
+      ],
+      "id": "2dae457e-10f8-4a72-a0c4-93e6eb884587",
+      "name": "Tiping"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        2528,
+        1552
+      ],
+      "id": "8f783564-e233-4c1d-827a-4bf721345bc4",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "7prG4gdV03YlxXfl",
+          "name": "Zakaria Vai Api"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://graph.facebook.com/v20.0/219878651199879/messages\n",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "access_token",
+              "value": "EAA5IZC0LFly0BQnZALfWiRPTzFKYiEVLkesVqdTKHZCnQX0ME1SDbIRWLofwox8JnbZCfxmQ8UhuZAlYRcvlB1SpGZBDDeTTWoQZCZBO94zBlO1VpWrFtgK6MAwCRgkyfPJXeiASbrsaJQqP6VXQuqNu1ABSH1dLTBHfb5Up9wdhIpCLnrLVcoVSISYVSb2q7TgunZBQZD"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"messaging_type\": \"RESPONSE\",\n  \"recipient\": { \"id\": \"{{ $('Split Out').item.json.psid }}\" },\n  \"message\": { \"text\": \"{{ $json.data.reply_1 }}\" }\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1392,
+        832
+      ],
+      "id": "a2006ae4-c3b2-4231-93e1-b97e67346c54",
+      "name": "HTTP Request1"
+    },
+    {
+      "parameters": {
+        "html": "={{ $json.output }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.markdown",
+      "typeVersion": 1,
+      "position": [
+        3376,
+        1344
+      ],
+      "id": "1e77a211-42e9-415f-be0b-6dcea102b971",
+      "name": "Markdown"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Split Out').item.json.psid }}",
+        "contextWindowLength": 100
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        2656,
+        1552
+      ],
+      "id": "df30ff61-0c52-4c7f-950d-0e2651f8c2d6",
+      "name": "Simple Memory"
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "If4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request4": {
+      "main": [
+        [
+          {
+            "node": "Analyze image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch2": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request4",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Image Quyery2": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request5": {
+      "main": [
+        [
+          {
+            "node": "Transcribe a recording",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyze image": {
+      "main": [
+        [
+          {
+            "node": "Image Quyery2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transcribe a recording": {
+      "main": [
+        [
+          {
+            "node": "Audio inquyrre",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Audio inquyrre": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Switch2",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "mark_seen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "freelancers Shop": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Date & Time": {
+      "main": [
+        [
+          {
+            "node": "Get a row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a row": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "Creat row",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Updat row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many rows": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If3": {
+      "main": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Tiping",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "If3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Date & Time",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delete a row": {
+      "main": [
+        [
+          {
+            "node": "typing_of",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get many rows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pinecone Vector Store1": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI1": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Pinecone Vector Store1",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If4": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet1": {
+      "main": [
+        [
+          {
+            "node": "If6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If6": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Order": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "typing_of": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Delete a row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "Markdown",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Markdown": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": []
+    }
+  },
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "server3.automationlearners.pro",
+            "user-agent": "facebookexternalua",
+            "content-length": "440",
+            "accept": "*/*",
+            "accept-encoding": "deflate, gzip",
+            "content-type": "application/json",
+            "instagram-api-version": "v24.0",
+            "x-forwarded-for": "31.13.115.32",
+            "x-forwarded-host": "server3.automationlearners.pro",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "3b827d7ca05b",
+            "x-hub-signature": "sha1=4b297338ee667d05ba41cfb4e6b2f9683043a07b",
+            "x-hub-signature-256": "sha256=f73d19ea1e944a3697f9db4e72606490afd7916e90a24dbc4594b4547109abd2",
+            "x-real-ip": "31.13.115.32"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "object": "instagram",
+            "entry": [
+              {
+                "time": 1769855132191,
+                "id": "17841475279240937",
+                "messaging": [
+                  {
+                    "sender": {
+                      "id": "2502195630177144"
+                    },
+                    "recipient": {
+                      "id": "17841475279240937"
+                    },
+                    "timestamp": 1769855131472,
+                    "message": {
+                      "mid": "aWdfZAG1faXRlbToxOklHTWVzc2FnZAUlEOjE3ODQxNDc1Mjc5MjQwOTM3OjM0MDI4MjM2Njg0MTcxMDMwMTI0NDI3NjAxNzA5NzA1ODU5NjI4NTozMjY0ODA2NDY1NzgwNzk5MDMwNDI5NTU3OTcxOTU2NTMxMgZDZD",
+                      "text": "কেমন আছেন"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "webhookUrl": "https://server3.automationlearners.pro/webhook/8dcdcd05-d199-4f21-a8b2-d97df047b87d",
+          "executionMode": "production"
+        },
+        "pairedItem": {
+          "item": 0,
+          "input": 1
+        }
+      }
+    ],
+    "Schedule Trigger": [
+      {
+        "json": {
+          "timestamp": "2026-01-31T11:30:00.001+01:00",
+          "Readable date": "January 31st 2026, 11:30:00 am",
+          "Readable time": "11:30:00 am",
+          "Day of week": "Saturday",
+          "Year": "2026",
+          "Month": "January",
+          "Day of month": "31",
+          "Hour": "11",
+          "Minute": "30",
+          "Second": "00",
+          "Timezone": "Europe/Berlin (UTC+01:00)"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "versionId": "444083bf-326b-4aca-976a-0635c78ee2f1",
+  "activeVersionId": null,
+  "triggerCount": 2,
+  "shared": [
+    {
+      "updatedAt": "2025-12-29T09:47:47.991Z",
+      "createdAt": "2025-12-29T09:47:47.991Z",
+      "role": "workflow:owner",
+      "workflowId": "gbBTWBXn8cP1vcR9",
+      "projectId": "OQG6AyXgb3w6ROOq"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}
