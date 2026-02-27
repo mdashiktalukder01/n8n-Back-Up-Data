@@ -1,0 +1,1891 @@
+{
+  "updatedAt": "2026-02-03T18:31:12.388Z",
+  "createdAt": "2025-11-01T21:20:30.385Z",
+  "id": "Mo2S8Y1P7reVn5HL",
+  "name": "WhatsApp Automation",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('WhatsApp Trigger').item.json.messages[0].type }}",
+                    "rightValue": "image",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "1daf0664-a824-4438-ba7f-5b2ccf1b7e4c"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "image"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "c9f9f9aa-3897-4cd7-a9c2-ba850ecce4d9",
+                    "leftValue": "={{ $('WhatsApp Trigger').item.json.messages[0].text.body }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Taxt"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "55dce9ab-094c-424f-a6e9-5439098f4d7b",
+                    "leftValue": "={{ $('WhatsApp Trigger').item.json.messages[0].type }}",
+                    "rightValue": "audio",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Voice"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        -2704,
+        1488
+      ],
+      "id": "2e55e051-e7f0-4a15-8e48-fb1b56a838e5",
+      "name": "Switch2"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "dece9eb1-a5b5-4cb0-b2d8-5ead7d6137fb",
+              "name": "['0'].content[0].text",
+              "value": "={{ $json['0'].content[0].text }}",
+              "type": "string"
+            },
+            {
+              "id": "7561459d-0d83-4c08-ba68-adbf727a7e61",
+              "name": "contacts[0].wa_id",
+              "value": "={{ $('WhatsApp Trigger').item.json.contacts[0].wa_id }}",
+              "type": "string"
+            },
+            {
+              "id": "de2e4f53-c3bc-44dd-878b-5275a0ead6cb",
+              "name": "contacts[0].profile.name",
+              "value": "={{ $('WhatsApp Trigger').item.json.contacts[0].profile.name }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1808,
+        1312
+      ],
+      "id": "b7281532-8c81-4ddb-8839-0eb944844e27",
+      "name": "Image Quyery2"
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "operation": "analyze",
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o",
+          "mode": "list",
+          "cachedResultName": "GPT-4O"
+        },
+        "inputType": "base64",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.1,
+      "position": [
+        -2032,
+        1312
+      ],
+      "id": "a800e539-0c6b-425a-95b3-b05b749a168e",
+      "name": "Analyze image",
+      "credentials": {
+        "openAiApi": {
+          "id": "7prG4gdV03YlxXfl",
+          "name": "Zakaria Vai Api"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c808071e-5f14-4892-8221-0858e2314e9e",
+              "name": "query",
+              "value": "={{ $json.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1808,
+        1696
+      ],
+      "id": "0272ea4e-f63f-4fdc-9903-340fb83f28ea",
+      "name": "Audio inquyrre"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "572175d1-681b-4e85-b8d3-8b281374a9d7",
+              "name": "data.body.entry[0].messaging[0].message.text",
+              "value": "={{ $('WhatsApp Trigger').item.json.messages[0].text.body }}",
+              "type": "string"
+            },
+            {
+              "id": "d3f5940c-0184-4a3a-92a3-81276a075001",
+              "name": "contacts[0].wa_id",
+              "value": "={{ $('WhatsApp Trigger').item.json.contacts[0].wa_id }}",
+              "type": "string"
+            },
+            {
+              "id": "c645f2d2-a4ce-404f-8d69-bfff7ebb46bf",
+              "name": "contacts[0].profile.name",
+              "value": "={{ $('WhatsApp Trigger').item.json.contacts[0].profile.name }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1808,
+        1504
+      ],
+      "id": "cf76c70f-c58a-4d33-8d6d-beb9a9b54889",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "dd3a2b21-a0ce-484a-bb1d-fd9614598f37",
+              "leftValue": "={{ $json.Stats }}",
+              "rightValue": "Run",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -2928,
+        1504
+      ],
+      "id": "b1b6b0fa-aff1-40ba-8d45-e81bbb270589",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "url": "https://freelancersshop.com/",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.3,
+      "position": [
+        -2240,
+        2352
+      ],
+      "id": "76452551-a286-4dbe-bd6f-57d7f65ac48b",
+      "name": "freelancers Shop"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "whatsapps",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "Number",
+              "keyValue": "={{ $('WhatsApp Trigger').item.json.contacts[0].wa_id }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -1360,
+        1504
+      ],
+      "id": "01b41f3c-b4c5-4a7f-b19c-c160607cd59e",
+      "name": "Get a row",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "TmSIzJy1PSYJ8AM0",
+          "name": "ashiktalukder9043@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "acd27ffa-68a7-4d63-b936-bf26fc078167",
+              "leftValue": "={{ $json.Number }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notExists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -1136,
+        1504
+      ],
+      "id": "120fe77b-b2c0-4b81-aeb6-8e4977bdf55e",
+      "name": "If2"
+    },
+    {
+      "parameters": {
+        "tableId": "whatsapps",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "Number",
+              "fieldValue": "={{ $('Merge').item.json.contacts[0].wa_id }}"
+            },
+            {
+              "fieldId": "buffer_text",
+              "fieldValue": "={{ $('Merge').item.json.data.body.entry[0].messaging[0].message.text }}"
+            },
+            {
+              "fieldId": "last_message_at",
+              "fieldValue": "={{ $now }}"
+            },
+            {
+              "fieldId": "status",
+              "fieldValue": "Panding"
+            },
+            {
+              "fieldId": "Name",
+              "fieldValue": "={{ $('Merge').item.json.contacts[0].profile.name }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -912,
+        1408
+      ],
+      "id": "30a4509d-1b9d-4ab0-af40-3505e032350a",
+      "name": "Creat row",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "TmSIzJy1PSYJ8AM0",
+          "name": "ashiktalukder9043@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "whatsapps",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "Number",
+              "condition": "eq",
+              "keyValue": "={{ $json.Number }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "buffer_text",
+              "fieldValue": "={{ $('Merge').item.json.data.body.entry[0].messaging[0].message.text }}"
+            },
+            {
+              "fieldId": "={{ $now }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -912,
+        1600
+      ],
+      "id": "2534a2f9-1202-424d-8325-b97b13eb1657",
+      "name": "Updat row",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "TmSIzJy1PSYJ8AM0",
+          "name": "ashiktalukder9043@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "whatsapps"
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -3392,
+        2128
+      ],
+      "id": "69e4c44b-8ad1-499d-86b1-2684eb2a959e",
+      "name": "Get many rows",
+      "credentials": {
+        "supabaseApi": {
+          "id": "TmSIzJy1PSYJ8AM0",
+          "name": "ashiktalukder9043@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "44add647-6a3c-4810-bc44-7ec40ff37b5b",
+              "leftValue": "={{ $json.diffsec }}",
+              "rightValue": "=10",
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -2720,
+        2128
+      ],
+      "id": "acab6d81-0668-4b76-baed-fdee61e353c7",
+      "name": "If3"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "85ea3eac-2360-466c-9dd0-af979de723d0",
+              "name": "diffsec",
+              "value": "={{ (Date.now() - new Date($json.last_message_at).getTime()) / 1000 }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -2944,
+        2128
+      ],
+      "id": "0f54fc82-1958-440c-b6d6-87c7b6404fbd",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1_UrqeALKrgc8hsPK_x99RlRtxxIPTz18bMgxVcwUWUQ",
+          "mode": "list",
+          "cachedResultName": "Ai Automation ",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1_UrqeALKrgc8hsPK_x99RlRtxxIPTz18bMgxVcwUWUQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Automation Contolar",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1_UrqeALKrgc8hsPK_x99RlRtxxIPTz18bMgxVcwUWUQ/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -3152,
+        1504
+      ],
+      "id": "e63dbf80-882a-4562-8d8a-6cfd0c8bda3c",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "LyUMa6lnJRFCagwx",
+          "name": "ashiktalukder9043@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "numberInputs": 3
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -1584,
+        1488
+      ],
+      "id": "5f0c339e-b29b-4148-aa56-3892a44fb4f2",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "Number",
+        "include": "allOtherFields",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        -3168,
+        2128
+      ],
+      "id": "fadb2b4e-0c0f-4fdf-8724-69c1edc97d38",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "tableId": "whatsapps",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "Number",
+              "condition": "eq",
+              "keyValue": "={{ $json.contacts[0].wa_id }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -1040,
+        2128
+      ],
+      "id": "78aeddea-7907-4e18-a82c-511f5ab5d31b",
+      "name": "Delete a row",
+      "alwaysOutputData": false,
+      "credentials": {
+        "supabaseApi": {
+          "id": "TmSIzJy1PSYJ8AM0",
+          "name": "ashiktalukder9043@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "html": "={{ $json.output }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.markdown",
+      "typeVersion": 1,
+      "position": [
+        -1792,
+        2128
+      ],
+      "id": "f083e036-9187-4b77-ab2d-5c4ece1a7cbc",
+      "name": "Markdown"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Get many rows').item.json.Number }}",
+        "contextWindowLength": 100
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -2368,
+        2352
+      ],
+      "id": "ab349ceb-6108-421c-b548-c057eb778b63",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "seconds",
+              "secondsInterval": 15
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -3616,
+        2128
+      ],
+      "id": "5f14b289-a019-4577-8a42-d4a7915d50f4",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "pineconeIndex": {
+          "__rl": true,
+          "value": "freelancersshop",
+          "mode": "list",
+          "cachedResultName": "freelancersshop"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStorePinecone",
+      "typeVersion": 1.3,
+      "position": [
+        -3088,
+        720
+      ],
+      "id": "c0790001-dac8-4d4f-83d1-41a32f9a4fae",
+      "name": "Pinecone Vector Store",
+      "credentials": {
+        "pineconeApi": {
+          "id": "hqsjsagVa1VxJckJ",
+          "name": "ashiktalukder9043@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -3200,
+        928
+      ],
+      "id": "92c27683-32dd-4280-9c98-65e2ff3a3cc5",
+      "name": "Embeddings OpenAI",
+      "credentials": {
+        "openAiApi": {
+          "id": "7prG4gdV03YlxXfl",
+          "name": "Zakaria Vai Api"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "dataType": "binary",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1.1,
+      "position": [
+        -2960,
+        928
+      ],
+      "id": "ae1a372f-dcde-40a1-aabf-4b427bad30c8",
+      "name": "Default Data Loader"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -2032,
+        2560
+      ],
+      "id": "09fbb36c-7685-4b12-b8a5-34f46496ed3f",
+      "name": "Embeddings OpenAI1",
+      "credentials": {
+        "openAiApi": {
+          "id": "7prG4gdV03YlxXfl",
+          "name": "Zakaria Vai Api"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1xJr0O4K4kuZmALKvGVrUahiHMsaqoR_p5oKocoP6Zh4",
+          "mode": "list",
+          "cachedResultName": "Freelancers Shop",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1xJr0O4K4kuZmALKvGVrUahiHMsaqoR_p5oKocoP6Zh4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1594525657,
+          "mode": "list",
+          "cachedResultName": "Orders",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1xJr0O4K4kuZmALKvGVrUahiHMsaqoR_p5oKocoP6Zh4/edit#gid=1594525657"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Order ID": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Order_ID', ``, 'string') }}",
+            "Name": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Name', ``, 'string') }}",
+            "Number": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Number', ``, 'string') }}",
+            "Address": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Address', ``, 'string') }}",
+            "Item": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Item', ``, 'string') }}",
+            "Color": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Color', ``, 'string') }}",
+            "Size": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Size', ``, 'string') }}",
+            "Design": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Design', ``, 'string') }}",
+            "Product": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Product', ``, 'string') }}",
+            "Price": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Price', ``, 'string') }}",
+            " Total money ": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('_Total_money_', ``, 'string') }}",
+            "Status": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Status', ``, 'string') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Order ID",
+              "displayName": "Order ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Number",
+              "displayName": "Number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Address",
+              "displayName": "Address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Item",
+              "displayName": "Item",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Color",
+              "displayName": "Color",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Size",
+              "displayName": "Size",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Design",
+              "displayName": "Design",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Product",
+              "displayName": "Product",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Price",
+              "displayName": "Price",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": " Total money ",
+              "displayName": " Total money ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        -1712,
+        2352
+      ],
+      "id": "92a536da-fe87-4e91-8e3b-f0ad42a15e55",
+      "name": "Order",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "LyUMa6lnJRFCagwx",
+          "name": "ashiktalukder9043@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('Split Out').item.json.buffer_text }}\n\nYou are the official customer support & sales assistant of FreelandersShop.com (Bangladesh).\n\nYour display name: MD Ashik Talukder  \nYou are a human customer service assistant (never say you are AI, bot, automation, or system).  \nAlways speak politely, respectfully, and address the customer as “Sir”.  \nYour tone should be humble, helpful, and calm with an Islamic mindset (politeness, honesty, gratitude).\n\nPRIMARY ROLE:\n- Provide accurate customer support\n- Help customers choose products\n- Guide customers step-by-step to complete an order\n\nIMPORTANT DATA SOURCE:\n- All product details, prices, stock, colors, sizes, availability, and descriptions are stored in the Pinecone Vector Store.\n- You MUST use Pinecone Vector Store data when answering product-related questions.\n- NEVER guess product price, stock, or availability.\n- If data is missing, politely ask the customer for the exact product name, link, or image.\n\nABOUT FREELANDERS SHOP:\n- 100% cotton fabric\n- Premium quality products\n- Trusted Bangladeshi brand\n\nOWNER INFORMATION:\nFreelanders Shop Owner: Zakaria Alam Mithu  \nFiverr Level 2 Seller & Upwork Top Rated Freelancer\n\nSHOP INFO:\nAddress: Mymensingh, Bhaluka, Square Master Bari  \nWebsite: https://freelandersshop.com  \nFacebook Page: (use Pinecone data if available)\n\nCUSTOMER ORDER INFORMATION TO COLLECT (step-by-step, never all at once):\n- Design / Logo\n- Color\n- Size\n- Quantity\n- Customer Name\n- Phone Number\n- Address (District + Police Station)\n\nORDER COLLECTION RULES:\n- First, send the order information checklist.\n- If the customer provides information one by one, request the missing fields one at a time.\n- Never overwhelm the customer.\n\nORDER REVIEW MESSAGE (before confirmation):\n“Thank you for providing all the information, Sir.\nPlease review your order details below. If everything is correct, I will confirm your order.”\n\nORDER CONFIRMATION MESSAGE:\n“Your order has been successfully placed, Sir!\nOrder ID: FS-XXX (use a 2–3 digit number)\nOur agent will contact you shortly to confirm the order.\nThank you for shopping with Freelanders Shop.”\n\nHUMAN AGENT REQUEST:\nIf a customer asks to talk to a human agent, immediately share this WhatsApp number:\n+8801560012314\n\nCRITICAL RULES:\n1. Never claim to be AI, automation, or a system.",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=You MUST respond ONLY in valid JSON.\nDo not write anything outside JSON.\nNo greetings, no explanations, no markdown, no emojis.\n\nThe JSON MUST exactly match this schema:\n\n{\n  \"reply_1\": \"string\",\n  \"reply_2\": \"string\"\n}\n\nRules:\n- reply_1: Answer the user's message (NO question).\n- reply_2: Ask EXACTLY ONE short question.\n- Always address the customer as \"Sir\".\n- Never say you are AI, bot, automation, or system.\n- Use Pinecone Vector Store for product data.\n- order_confirmed must be true ONLY when the user explicitly confirms the order.\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        -2208,
+        2128
+      ],
+      "id": "f29beabb-87f6-4787-bc7a-5cf2120bdc73",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "updates": [
+          "messages"
+        ],
+        "options": {}
+      },
+      "type": "n8n-nodes-base.whatsAppTrigger",
+      "typeVersion": 1,
+      "position": [
+        -3376,
+        1504
+      ],
+      "id": "43251384-2cd3-4643-b4c8-85d49df8945b",
+      "name": "WhatsApp Trigger",
+      "webhookId": "b30e1f11-0547-45e4-b1d7-4ed3dbd328c0",
+      "credentials": {
+        "whatsAppTriggerApi": {
+          "id": "POjWXbVDiXg4qsqT",
+          "name": "Talukder iT Group"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "=https://graph.facebook.com/v19.0/{{ $('WhatsApp Trigger').item.json.messages[0].audio.id }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer EAAVz7I6HQK0BQkKKd3nZAsaybMf3Mqrq4GPg8E9ZBTZCHrvAab2vZCqskEhiVs67tSBdY84bkbCbzz35ZA4s6RX6mZCAaoFgvHXHV9F42aUoHxUSUZAAYHwdyuIECXmuhmpg1SW1lofPa6m54RuukSGwunNnGjjpGOQRLVkUALnM0UTQgF1PZCOwZCjuJDBKgLwZDZD"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -2480,
+        1696
+      ],
+      "id": "71050c59-7654-414e-a381-7a091106b8e8",
+      "name": "typing_on1"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.url }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer EAAVz7I6HQK0BQkKKd3nZAsaybMf3Mqrq4GPg8E9ZBTZCHrvAab2vZCqskEhiVs67tSBdY84bkbCbzz35ZA4s6RX6mZCAaoFgvHXHV9F42aUoHxUSUZAAYHwdyuIECXmuhmpg1SW1lofPa6m54RuukSGwunNnGjjpGOQRLVkUALnM0UTQgF1PZCOwZCjuJDBKgLwZDZD"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "neverError": true,
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -2256,
+        1696
+      ],
+      "id": "f24caf22-046b-460e-9b42-e3d57adde3cb",
+      "name": "typing_on2"
+    },
+    {
+      "parameters": {
+        "resource": "audio",
+        "operation": "transcribe",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.1,
+      "position": [
+        -2032,
+        1696
+      ],
+      "id": "61a4f2dc-cd0c-43ad-974d-55e466df06ce",
+      "name": "Transcribe a recording",
+      "credentials": {
+        "openAiApi": {
+          "id": "7prG4gdV03YlxXfl",
+          "name": "Zakaria Vai Api"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.url }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer EAAVz7I6HQK0BQkKKd3nZAsaybMf3Mqrq4GPg8E9ZBTZCHrvAab2vZCqskEhiVs67tSBdY84bkbCbzz35ZA4s6RX6mZCAaoFgvHXHV9F42aUoHxUSUZAAYHwdyuIECXmuhmpg1SW1lofPa6m54RuukSGwunNnGjjpGOQRLVkUALnM0UTQgF1PZCOwZCjuJDBKgLwZDZD"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "neverError": true,
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -2256,
+        1312
+      ],
+      "id": "8fb7804b-d95e-4c5a-b806-270a5088a215",
+      "name": "typing_on6"
+    },
+    {
+      "parameters": {
+        "url": "=https://graph.facebook.com/v19.0/{{ $('WhatsApp Trigger').item.json.messages[0].image.id }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer EAAVz7I6HQK0BQkKKd3nZAsaybMf3Mqrq4GPg8E9ZBTZCHrvAab2vZCqskEhiVs67tSBdY84bkbCbzz35ZA4s6RX6mZCAaoFgvHXHV9F42aUoHxUSUZAAYHwdyuIECXmuhmpg1SW1lofPa6m54RuukSGwunNnGjjpGOQRLVkUALnM0UTQgF1PZCOwZCjuJDBKgLwZDZD"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -2480,
+        1312
+      ],
+      "id": "623d21c4-ae5f-4325-be75-c540c7579f47",
+      "name": "typing_on5"
+    },
+    {
+      "parameters": {
+        "operation": "send",
+        "phoneNumberId": "822741074266013",
+        "recipientPhoneNumber": "={{ $('Split Out').item.json.Number }}",
+        "textBody": "={{ $json.data.reply_1 }}",
+        "additionalFields": {
+          "previewUrl": true
+        }
+      },
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        -1568,
+        2128
+      ],
+      "id": "7e5f99e2-fe2c-4ff3-bcdd-9719fb1e313b",
+      "name": "Fast Send message",
+      "webhookId": "652cdb6f-e2b4-4b6a-b588-020a2d48655f",
+      "credentials": {
+        "whatsAppApi": {
+          "id": "w7isBZGHyBnJQPdL",
+          "name": "Talukder it Group"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1xJr0O4K4kuZmALKvGVrUahiHMsaqoR_p5oKocoP6Zh4",
+          "mode": "list",
+          "cachedResultName": "Freelancers Shop",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1xJr0O4K4kuZmALKvGVrUahiHMsaqoR_p5oKocoP6Zh4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1312864950,
+          "mode": "list",
+          "cachedResultName": "WhatsApp Costomar Data ",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1xJr0O4K4kuZmALKvGVrUahiHMsaqoR_p5oKocoP6Zh4/edit#gid=1312864950"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Date ",
+              "lookupValue": "={{ $json.Number }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -816,
+        2128
+      ],
+      "id": "e80d98e4-63af-4256-b1a7-8ef3e0200ee9",
+      "name": "Number chak post",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "LyUMa6lnJRFCagwx",
+          "name": "ashiktalukder9043@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "e2821fea-0b75-49ea-a540-3d91c282261c",
+              "leftValue": "={{ $json['Castomar Number'] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notExists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -592,
+        2128
+      ],
+      "id": "9704e748-b25c-442e-9696-106c1752bdb2",
+      "name": "Tdantety"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1xJr0O4K4kuZmALKvGVrUahiHMsaqoR_p5oKocoP6Zh4",
+          "mode": "list",
+          "cachedResultName": "Freelancers Shop",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1xJr0O4K4kuZmALKvGVrUahiHMsaqoR_p5oKocoP6Zh4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1312864950,
+          "mode": "list",
+          "cachedResultName": "WhatsApp Costomar Data ",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1xJr0O4K4kuZmALKvGVrUahiHMsaqoR_p5oKocoP6Zh4/edit#gid=1312864950"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Date ": "={{ $now }}",
+            "Castomar Number": "={{ $('Fast Send message1').item.json.contacts[0].wa_id }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Date ",
+              "displayName": "Date ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Castomar Number",
+              "displayName": "Castomar Number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Total Order",
+              "displayName": "Total Order",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -368,
+        2128
+      ],
+      "id": "3049389e-2188-4da8-8edf-a088470b44d8",
+      "name": "Steor Lead",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "LyUMa6lnJRFCagwx",
+          "name": "ashiktalukder9043@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "formTitle": "pinecone vector database",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "pinecone vector database",
+              "fieldType": "file"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.3,
+      "position": [
+        -3360,
+        720
+      ],
+      "id": "2a31b218-8f92-4c1e-8d53-a4dc7a33b123",
+      "name": "File Uplode",
+      "webhookId": "480c04d7-c8cd-4f87-8cf0-d8b519e76079",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "height": 688,
+        "width": 3696,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -3808,
+        2016
+      ],
+      "typeVersion": 1,
+      "id": "9c543e0d-21e2-425b-8673-0ba05ca7ae4b",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## I'm a note \n**Double click** to edit me. [Guide](https://docs.n8n.io/workflows/components/sticky-notes/)                                    ",
+        "height": 768,
+        "width": 3680,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -3808,
+        1200
+      ],
+      "typeVersion": 1,
+      "id": "7e9b6fe2-5923-436f-b2af-95192f4d2614",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "height": 560,
+        "width": 1376,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -3792,
+        544
+      ],
+      "typeVersion": 1,
+      "id": "ea757680-08fd-4b59-88f9-75409aac285f",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "operation": "send",
+        "phoneNumberId": "822741074266013",
+        "recipientPhoneNumber": "={{ $('Split Out').item.json.Number }}",
+        "textBody": "={{ $('Markdown').item.json.data.reply_2 }}",
+        "additionalFields": {
+          "previewUrl": true
+        }
+      },
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        -1216,
+        2128
+      ],
+      "id": "50997ee8-5964-4b12-9218-fce40de12faf",
+      "name": "Fast Send message1",
+      "webhookId": "652cdb6f-e2b4-4b6a-b588-020a2d48655f",
+      "credentials": {
+        "whatsAppApi": {
+          "id": "w7isBZGHyBnJQPdL",
+          "name": "Talukder it Group"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": 3
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -1392,
+        2128
+      ],
+      "id": "267caa24-5b1b-4eee-98e5-1ec38c5d8c9c",
+      "name": "Wait",
+      "webhookId": "1ea26c65-6e9f-47f8-86ad-ddce9d7b953e"
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolDescription": "Retrieve the most relevant FreelancersShop product/policy info from Pinecone (price, stock, variants, links). Use for any product inquiry; never guess if info is missing.\n",
+        "pineconeIndex": {
+          "__rl": true,
+          "value": "freelancersshop",
+          "mode": "list",
+          "cachedResultName": "freelancersshop"
+        },
+        "topK": 5,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStorePinecone",
+      "typeVersion": 1.3,
+      "position": [
+        -2112,
+        2352
+      ],
+      "id": "26cc0e69-d595-416e-8e42-2ae8dad6689d",
+      "name": "Pinecone Vector Store1",
+      "credentials": {
+        "pineconeApi": {
+          "id": "hqsjsagVa1VxJckJ",
+          "name": "ashiktalukder9043@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"reply_1\": \"string\",\n  \"reply_2\": \"string\"\n}\n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        -1824,
+        2352
+      ],
+      "id": "8d2da5f8-c906-4376-9452-3e6ee11b97d4",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -2544,
+        2368
+      ],
+      "id": "c6d7fa2f-63b7-4f7c-b059-59cfcaaec5c0",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "imNNcJlQ39WYroLw",
+          "name": "ashiktalukder336@gmail.com"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Switch2": {
+      "main": [
+        [
+          {
+            "node": "typing_on5",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "typing_on1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Image Quyery2": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyze image": {
+      "main": [
+        [
+          {
+            "node": "Image Quyery2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Audio inquyrre": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Switch2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "freelancers Shop": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a row": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "Creat row",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Updat row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many rows": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If3": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "If3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Get a row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delete a row": {
+      "main": [
+        [
+          {
+            "node": "Number chak post",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Markdown": {
+      "main": [
+        [
+          {
+            "node": "Fast Send message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get many rows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Pinecone Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Default Data Loader": {
+      "ai_document": [
+        [
+          {
+            "node": "Pinecone Vector Store",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI1": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Pinecone Vector Store1",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Order": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Markdown",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "WhatsApp Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "typing_on1": {
+      "main": [
+        [
+          {
+            "node": "typing_on2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "typing_on2": {
+      "main": [
+        [
+          {
+            "node": "Transcribe a recording",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transcribe a recording": {
+      "main": [
+        [
+          {
+            "node": "Audio inquyrre",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "typing_on6": {
+      "main": [
+        [
+          {
+            "node": "Analyze image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "typing_on5": {
+      "main": [
+        [
+          {
+            "node": "typing_on6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fast Send message": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Number chak post": {
+      "main": [
+        [
+          {
+            "node": "Tdantety",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tdantety": {
+      "main": [
+        [
+          {
+            "node": "Steor Lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "File Uplode": {
+      "main": [
+        [
+          {
+            "node": "Pinecone Vector Store",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fast Send message1": {
+      "main": [
+        [
+          {
+            "node": "Delete a row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Fast Send message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pinecone Vector Store1": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": []
+    }
+  },
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "3582d606-e7e3-4ddb-9fee-6d2c9edf6110",
+  "activeVersionId": null,
+  "triggerCount": 2,
+  "shared": [
+    {
+      "updatedAt": "2025-11-01T21:20:30.387Z",
+      "createdAt": "2025-11-01T21:20:30.387Z",
+      "role": "workflow:owner",
+      "workflowId": "Mo2S8Y1P7reVn5HL",
+      "projectId": "OQG6AyXgb3w6ROOq"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}
